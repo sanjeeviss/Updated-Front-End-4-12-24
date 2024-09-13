@@ -1,0 +1,29 @@
+.container {
+  font-size: 14px;
+}
+
+.card {
+  padding: 20px;
+}
+
+.header {
+  font-size: 16px;
+}
+
+.table {
+  font-size: 14px;
+  padding: 10px;
+  width: 780px;
+  table-layout: fixed;
+}
+
+.tableCell {
+  padding: 10px;
+  border: 1px solid black;
+  width: 33.33%;
+  font-size: 14px;
+}
+
+.head {
+  font-size: 30px;
+}

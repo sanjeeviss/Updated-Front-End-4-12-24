@@ -1,0 +1,160 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.css-flbe84-MuiDayCalendar-weekContainer {
+  width: 800px !important; /* Set width to 800px */
+  height: 100px;
+}
+.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+  width: 110px !important;
+}
+
+.css-1vwnylm-MuiDateCalendar-root {
+  max-width: none !important; /* Remove max width */
+  max-height: 800px; /* Set max height if needed */
+}
+
+.css-i5q14k-MuiDayCalendar-header {
+  width: 800px !important; /* Set width to 800px */
+}
+
+.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+  width: 800px;
+  height: 100px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.css-4d6t4q-MuiDateCalendar-root {
+  width: 880px !important;
+}
+.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+  width: 107px;
+  height: 100px;
+}
+
+.css-4d6t4q-MuiDateCalendar-root .MuiPickersDay-root {
+  border-radius: none !important;
+  border-radius: 1px;
+}
+
+.css-1t0788u-MuiPickersSlideTransition-root-MuiDayCalendar-slideTransition {
+  height: 800px !important;
+}
+
+.css-4d6t4q-MuiDateCalendar-root {
+  height: 800px !important;
+  max-height: none !important;
+}
+
+.css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  background-color: rgb(154, 255, 96);
+}
+.MuiPickersDay-weekday {
+  background-color: "rgba(154, 255, 96, 0.5)";
+}
+
+.chatbot-container {
+  background-color: #eeffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-header {
+  border-radius: 8px 8px 0 0;
+}
+
+.chatbot-messages {
+  border-radius: 0 0 8px 8px;
+}
+
+.message {
+  max-width: 40%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.message.user {
+  background-color: #3e3d3d;
+  max-width: 50%;
+  text-align: left;
+  float: left;
+  font-family: "Arial";
+}
+
+.message.bot {
+  background-color: #00bcd4;
+  max-width: 100%;
+  text-align: left;
+  float: right;
+}
+
+.chatbot-buttons button {
+  margin: 4px;
+}
+
+.chatbot-input {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+.popup {
+  display: none;
+  position: absolute;
+  background-color: white;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.popup.open {
+  display: block;
+}
+.Background {
+  background-color: #ccc;
+}
