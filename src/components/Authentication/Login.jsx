@@ -217,7 +217,7 @@ function LoginOthers(props) {
                 sx={{ backgroundColor: "#f9f9f9" }}
               /> */}
               <select
-                style={{ height: "50px", width: "390px" }}
+                style={{ height: "50px", width: "333px" }}
                 onChange={(e) => setLoginType(e.target.value)}>
                 <option>Select Login Type</option>
                 <option>Company</option>

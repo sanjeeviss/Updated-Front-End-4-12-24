@@ -22,7 +22,11 @@ import SchoolIcon from '@mui/icons-material/School';
 import BookIcon from '@mui/icons-material/Book';
 import { keyframes } from '@mui/system';
 import { Navigate, useNavigate } from "react-router-dom";
-
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import SettingsIcon from '@mui/icons-material/Settings';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import RedeemIcon from '@mui/icons-material/Redeem';
+import holiday from "../../images/Holiday-icon.png"
 const bounce = keyframes({
   '0%, 20%, 50%, 80%, 100%': {
     transform: 'translateY(0)',
@@ -40,12 +44,12 @@ export default function HomePage() {
     const navigate = useNavigate();
 
     const cardItems = [
-        { text: "Settings", icon: <SchoolIcon /> ,onclick : () => navigate('/Masters')  },
-        { text: "Reimbursement", icon: <WorkIcon /> },
+        { text: "Dashboard", icon: <DashboardIcon />,onclick:()=>navigate('/DBoards') },
+        { text: "Settings", icon: <SettingsIcon /> ,onclick : () => navigate('/Masters')  },
+        { text: "Reimbursement", icon: <CurrencyExchangeIcon />,onclick : () => navigate('/EmployeeReimbursement') },
         { text: "Attendance", icon: <TodayIcon />, onclick : () => navigate('/Attendance01') },
         { text: "Leave", icon: <AssignmentIcon />,onclick:()=>navigate('/LeaveRequestHr') },
-        { text: "Dashboard", icon: <AccessTimeIcon /> },
-        { text: "Holiday", icon: <ReceiptIcon />, onclick : () => navigate('/payslipgenerator') },
+        { text: "Holiday", icon: <img src={holiday} width={30} height={30} />, onclick : () => navigate('/HolidaysPage') },
         { text: "Slabs", icon: <BookIcon />, onclick : () => navigate('/SlabTemplateEmp') }, 
         { text: "Employee", icon: <PeopleIcon />, onclick:()=>navigate('/EmployeeHome')},
       ];

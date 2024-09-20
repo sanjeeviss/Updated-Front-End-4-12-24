@@ -10,6 +10,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { confirmAlert } from 'react-confirm-alert'; 
 import EditableCell from './EditableCell';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -23,6 +24,18 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
       backgroundColor: '#D3D3D3',
       color: '#000000',
     },
+    '& .MuiTablePagination-selectLabel': {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: 400,
+    fontSize: '0.875rem',
+    lineHeight: 1.43,
+    letterSpacing: '0.01071em',
+    flexShrink: 0,
+  },
+  '& p': {
+    marginTop: 0,
+    marginBottom: '0rem',
+  },
   }));
   
   const initialRows = [
@@ -248,21 +261,21 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
 
 
   const columns = [
-    { field: 'AttBonusType', headerName: 'AttBonusType', flex: 0.1, minWidth: 40, editable: isEditable, headerAlign: 'center', align: 'center' },
+    { field: 'AttBonusType', headerName: 'Number of days',type:'number', flex: 0.1, minWidth: 40, editable: isEditable, headerAlign: 'center', align: 'center' },
     { field: 'AttBonusValue', headerName: 'AttBonusValue', flex: 0.1, minWidth: 40, editable: isEditable, headerAlign: 'center', align: 'center' }, // Further reduced width
-    { field: 'actions', headerName: '', flex: 0.03, minWidth: 15, renderCell: (params) => (<IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRow(params.id)}><DeleteIcon /></IconButton>), headerAlign: 'center', align: 'center' }, // Reduced width for actions column
+    { field: 'actions', headerName: '', flex: 0.03, minWidth: 15, renderCell: (params) => (<IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRow(params.id)}><DeleteOutlinedIcon /></IconButton>), headerAlign: 'center', align: 'center' }, // Reduced width for actions column
   ];
 
   const retrievedColumns = [
     { field: 'categoryName', headerName: 'Category Name', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center', },
-    { field: 'AttBonusType', headerName: 'AttBonusType', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="AttBonusType" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),   },
+    { field: 'AttBonusType', headerName: 'Number of days', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="AttBonusType" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),   },
     { field: 'AttBonusValue', headerName: 'AttBonusValue', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="AttBonusValue" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),    },
-    { field: 'actions', headerName: '', flex: 0.2, minWidth: 80, headerAlign: 'center', align: 'center', renderCell: (params) => ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> <IconButton variant="outlined" color="primary" size="small" onClick={() => handleEditRetrievedRow(params.id)}  style={{ marginRight: 8 }}> <EditIcon /> </IconButton> <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRetrievedRow(params.id)} > <DeleteIcon /> </IconButton> </div> ), }, 
+    { field: 'actions', headerName: '', flex: 0.2, minWidth: 80, headerAlign: 'center', align: 'center', renderCell: (params) => ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> <IconButton variant="outlined" color="primary" size="small" onClick={() => handleEditRetrievedRow(params.id)}  style={{ marginRight: 8 }}> <EditIcon /> </IconButton> <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRetrievedRow(params.id)} > <DeleteOutlinedIcon /> </IconButton> </div> ), }, 
   ];
   
   
-  const handleProcessRowUpdate = (newRow) => {
-    const updatedRows = rows.map((row) =>
+  const handleProcessRowUpdate = (newRow)  => {
+    const updatedRows = rows.map((row) => 
       row.id === newRow.id ? { ...row, ...newRow } : row
     );
     setRows(updatedRows);
@@ -313,9 +326,9 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
           <Button variant="outlined" color="primary" size="small" onClick={handleSave} style={{ marginRight: 8 }}>
             Save
           </Button>
-          <Button variant="contained" color="success"  size="small" onClick={handleEdit} >
+          {/* <Button variant="contained" color="success"  size="small" onClick={handleEdit} >
             Edit
-          </Button>
+          </Button> */}
         </div>
         </div>
          )}

@@ -19,6 +19,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import parse from 'date-fns/parse';
 import EditIcon from '@mui/icons-material/Edit';
 import EditableCell from './EditableCell';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 
 
@@ -78,7 +79,19 @@ const StyledDataGrid = styled(DataGrid)({
   },
   '& .MuiDataGrid-cell:focus-within': {
     outline: 'none',
-  }
+  },
+  '& .MuiTablePagination-selectLabel': {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: 400,
+    fontSize: '0.875rem',
+    lineHeight: 1.43,
+    letterSpacing: '0.01071em',
+    flexShrink: 0,
+  },
+  '& p': {
+    marginTop: 0,
+    marginBottom: '0rem',
+  },
 });
 
 const initialRows = [
@@ -346,7 +359,7 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
     { field: 'otToDuration', headerName: 'OT To Duration', flex: 1, minWidth: 150, renderCell: (params) => ( <TimePickerCell value={params.value} onChange={(newValue) => { handleRowUpdate(params.id, 'otToDuration', newValue); }} disabled={!isEditable} /> ), headerAlign: 'center', align: 'center', editable: false},
     { field: 'otHours', headerName: 'OT Hours', flex: 1, minWidth: 120, renderCell: (params) => ( <TimePickerCell value={params.value} onChange={(newValue) => { handleRowUpdate(params.id, 'otHours', newValue); }} disabled={!isEditable} /> ), headerAlign: 'center', align: 'center', editable: false },
     { field: 'otRate', headerName: 'OT Rate', flex: 1, type: 'singleSelect', valueOptions: ["1.0", "1.5", "2.0", "2.5", "3.0", "3.5"], minWidth: 120, editable: false, headerAlign: 'center', align: 'center', renderCell: (params) => ( <TextField select value={params.value || ''} onChange={(event) => { handleRowUpdate(params.id, 'otRate', event.target.value); }} disabled={!isEditable} SelectProps={{ native: true,}}> <option value="" disabled>Select rate</option>  {["1.0", "1.5", "2.0", "2.5", "3.0", "3.5"].map((option) => ( <option key={option} value={option}> {option} </option> ))} </TextField> ), },
-    { field: 'actions', headerName: '', flex: 0.2, minWidth: 40, renderCell: (params) => ( <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRow(params.id)}> <DeleteIcon /> </IconButton> ), headerAlign: 'center', align: 'center', }
+    { field: 'actions', headerName: '', flex: 0.2, minWidth: 40, renderCell: (params) => ( <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRow(params.id)}> <DeleteOutlinedIcon /> </IconButton> ), headerAlign: 'center', align: 'center', }
      ];
 
   const retrievedColumns = [
@@ -355,7 +368,7 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
     { field: 'otToDuration', headerName: 'OT To Duration', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center',   renderCell: (params) => ( <EditableCell id={params.id} field="otToDuration" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable}  /> ),   },
     { field: 'otHours', headerName: 'OT Hours', flex: 1, minWidth: 120, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="otHours" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable}  /> ), },
     { field: 'otRate', headerName: 'OT Rate', flex: 1, minWidth: 120, headerAlign: 'center', align: 'center',   renderCell: (params) => ( <EditableCell id={params.id} field="otRate" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable}  />), },
-    { field: 'actions', headerName: '', flex: 0.2, minWidth: 80, headerAlign: 'center', align: 'center', renderCell: (params) => ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> <IconButton variant="outlined" color="primary" size="small" onClick={() => handleEditRetrievedRow(params.id)} style={{ marginRight: 8 }}> <EditIcon /> </IconButton> <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRetrievedRow(params.id)}> <DeleteIcon /> </IconButton> </div> ), }, 
+    { field: 'actions', headerName: '', flex: 0.2, minWidth: 80, headerAlign: 'center', align: 'center', renderCell: (params) => ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> <IconButton variant="outlined" color="primary" size="small" onClick={() => handleEditRetrievedRow(params.id)} style={{ marginRight: 8 }}> <EditIcon /> </IconButton> <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRetrievedRow(params.id)}> <DeleteOutlinedIcon /> </IconButton> </div> ), }, 
   ];
 
   return (
@@ -388,9 +401,9 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
           <Button variant="outlined" color="primary" size="small" onClick={saveData} style={{ marginRight: 8 }}>
             Save
           </Button>
-          <Button variant="contained" color="success" size="small" onClick={handleEdit}>
+          {/* <Button variant="contained" color="success" size="small" onClick={handleEdit}>
             Edit
-          </Button>
+          </Button> */}
         </div>
       </div>
     )}

@@ -26,6 +26,15 @@ import { useAppStore } from "./appStore";
 import { useLocation } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import React, { useState, useEffect } from 'react';
+import PeopleIcon from "@mui/icons-material/People";
+import TodayIcon from "@mui/icons-material/Today";
+import payroll from "../../images/Payroll-icon.png"
+import PaidIcon from '@mui/icons-material/Paid';
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import DeckIcon from '@mui/icons-material/Deck';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 const drawerWidth = 210;
 
 const openedMixin = (theme) => ({
@@ -245,7 +254,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DashboardIcon />
+                <PeopleIcon />
               </ListItemIcon>
               <ListItemText primary="All Employees" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
@@ -272,7 +281,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DashboardIcon />
+                <TodayIcon />
               </ListItemIcon>
               <ListItemText primary=" Attendance" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
@@ -298,7 +307,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DashboardIcon />
+                <PaidIcon />
               </ListItemIcon>
               <ListItemText primary="Payroll" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
@@ -325,7 +334,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DashboardIcon />
+                <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary="Leaves" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
@@ -352,7 +361,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DashboardIcon />
+                <DeckIcon />
               </ListItemIcon>
               <ListItemText primary="Holiday" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
@@ -378,7 +387,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DashboardIcon />
+                < CurrencyExchangeIcon/>
               </ListItemIcon>
               <ListItemText primary="Reimburesemnt" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
@@ -404,7 +413,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DashboardIcon />
+                <SettingsIcon />
               </ListItemIcon>
               <ListItemText primary="Settings" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>

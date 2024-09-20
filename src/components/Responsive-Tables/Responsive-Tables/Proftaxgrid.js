@@ -15,6 +15,8 @@ import {Grid} from '@mui/material';
 import { confirmAlert } from 'react-confirm-alert'; 
 import EditableCell from './EditableCell';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+
 
 
 // Styled DataGrid component
@@ -40,6 +42,18 @@ const StyledDataGrid = styled(DataGrid)({
   },
   '& .MuiDataGrid-cell:focus-within': {
     outline: 'none',
+  },
+  '& .MuiTablePagination-selectLabel': {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: 400,
+    fontSize: '0.875rem',
+    lineHeight: 1.43,
+    letterSpacing: '0.01071em',
+    flexShrink: 0,
+  },
+  '& p': {
+    marginTop: 0,
+    marginBottom: '0rem',
   }
 });
 
@@ -59,11 +73,11 @@ export default function PtGrid() {
     page: 0
   });
   const [isEditable, setIsEditable] = React.useState(true);
-  const[Category, setcategory] = useState([])
-  const[vCategoryName, setvCategoryName] = useState("")
+  const [Category, setcategory] = useState([])
+  const [State, setState] = useState("")
   const [retrievedRows, setRetrievedRows] = useState([]);
   const [showFirstGrid, setShowFirstGrid] = useState(true);
-  const[Branch, setbranch] = useState([])
+  const [Branch, setbranch] = useState([])
   const [isloggedin, setisloggedin] = useState(sessionStorage.getItem("user"))
   const [editableRowId, setEditableRowId] = useState(null);
   const [editedRows, setEditedRows] = useState({});
@@ -81,12 +95,12 @@ export default function PtGrid() {
       })
       setbranch(data1.data)
       console.log("data", data1)
-      if (data.data.length > 0) {
-        const defaultCategory = data.data[0].vCategoryName;
-        setvCategoryName(defaultCategory);
+      if (data1.data.length > 0) {
+        const defaultCategory = data1.data[0].State;
+        setState(defaultCategory);
         fetchdata(defaultCategory);
       }
-    }
+    } 
     getData();
     console.log("Branch", Branch)
   }, []);
@@ -95,38 +109,59 @@ export default function PtGrid() {
   const CustomCell = React.forwardRef((params, ref) => {
     const [textValue, setTextValue] = React.useState(params.value || '');
     const [dropdownValue, setDropdownValue] = React.useState('');
+    const inputRef = React.useRef(null);  
+  const cursorPositionRef = React.useRef(null); 
   
-    const handleTextChange = (event) => {
-      if (isEditable) { // Check if the grid is editable
-        const input = event.target;
-        const newValue = input.value;
-        const cursorPosition = input.selectionStart;
+    // Function to handle text changes
+    const handleTextChange = React.useCallback((event) => {  
+      if (isEditable) {  
+       const input = event.target;  
+       const newValue = input.value;  
+       const cursorPosition = input.selectionStart;  
+     
+       // Add .00 logic if applicable  
+       let updatedValue = newValue;  
+       if (!isNaN(newValue) && newValue.indexOf('.') === -1) {  
+         updatedValue = `${newValue}.00`;  
+       }  
+     
+       // Update the value state without losing the cursor position  
+       setTextValue(updatedValue);  
+     
+       // Store the cursor position  
+       cursorPositionRef.current = cursorPosition;  
+     
+       // Restore cursor position after re-render  
+       setTimeout(() => {  
+        if (inputRef.current) {  
+         inputRef.current.setSelectionRange(cursorPositionRef.current, cursorPositionRef.current);  
+        }  
+      }, 0);
+     
+       // Use debounce to reduce unnecessary updates  
+       debounceUpdateCell(params, updatedValue);  
+      }  
+     }, [isEditable, params, inputRef]);
   
-        if (!isNaN(newValue) && newValue.indexOf('.') === -1) {
-          input.value = `${newValue}.00`;
-          input.selectionStart = cursorPosition;
-          input.selectionEnd = cursorPosition;
-        }
-  
-        setTextValue(input.value);
-        params.api.setEditCellValue({ id: params.id, field: params.field, value: input.value });
-        // Update the rows state
-        params.api.updateRows([{ id: params.id, UpperLimit: input.value }]);
-      }
-    };
-  
+    // Function to handle dropdown changes
     const handleDropdownChange = (event) => {
-      if (isEditable) { // Check if the grid is editable
+      if (isEditable) {
         const selectedValue = event.target.value;
-        if (selectedValue === 'Upwards') {
-          setTextValue('Upwards');
-          params.api.setEditCellValue({ id: params.id, field: params.field, value: 'Upwards' });
-          // Update the rows state
-          params.api.updateRows([{ id: params.id, UpperLimit: 'Upwards' }]);
-        }
-        setDropdownValue(''); // Reset dropdown value to empty
+        const newValue = selectedValue === 'Upwards' ? 'Upwards' : '';
+        setDropdownValue(newValue);
+        params.api.setEditCellValue({ id: params.id, field: params.field, value: newValue });
+        handleProcessRowUpdate({ ...params.row, [params.field]: newValue });
       }
     };
+  
+    
+    const debounceUpdateCell = React.useCallback(
+      debounce((params, value) => {
+        params.api.setEditCellValue({ id: params.id, field: params.field, value });
+        handleProcessRowUpdate({ ...params.row, [params.field]: value });
+      }, 1500), // Adjust the debounce time as needed
+      []
+    );
   
     return (
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -136,15 +171,16 @@ export default function PtGrid() {
           variant="outlined"
           size="small"
           style={{ flex: 1, marginRight: 8 }}
-          ref={ref}
-          disabled={!isEditable} // Disable the TextField if the grid is not editable
+          inputRef={inputRef} // Attach the ref to the input
+          disabled={!isEditable}
+          onFocus={(e) => e.stopPropagation()} // Prevent losing focus by stopping event bubbling
         />
         <Select
           value={dropdownValue}
           onChange={handleDropdownChange}
           size="small"
           style={{ width: 30, height: 30 }}
-          disabled={!isEditable} // Disable the Select if the grid is not editable
+          disabled={!isEditable}
         >
           <MenuItem value="Upwards">Upwards</MenuItem>
         </Select>
@@ -152,53 +188,129 @@ export default function PtGrid() {
     );
   });
   
-  const AnnualBasisCell = React.forwardRef((params, ref) => {
-    const [textValue, setTextValue] = React.useState(params.value || '');
+
+// Utility function to debounce updates (can be placed in a utility file)
+function debounce(func, wait) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(this, args);
+    }, wait);
+  };
+}
+
   
-    const handleTextChange = (event) => {
-      if (isEditable) { // Check if the grid is editable
-        const input = event.target;
-        const newValue = input.value;
-        const cursorPosition = input.selectionStart;
-  
-        if (!isNaN(newValue) && newValue.indexOf('.') === -1) {
-          input.value = `${newValue}.00`;
-          input.selectionStart = cursorPosition;
-          input.selectionEnd = cursorPosition;
-        }
-  
-        setTextValue(input.value);
-        params.api.setEditCellValue({ id: params.id, field: params.field, value: input.value });
-        // Update the rows state
-        params.api.updateRows([{ id: params.id, AnnualBasis: input.value }]);
+const AnnualBasisCell = React.forwardRef((params, ref) => {
+  const [textValue, setTextValue] = React.useState(params.value || '');
+  const inputRef = React.useRef(null); // Ref to manage input focus
+
+  // Debounce function to handle updates without too many renders
+  const debounceUpdateCell = React.useCallback(
+    debounce((params, value) => {
+      params.api.setEditCellValue({ id: params.id, field: params.field, value });
+      handleProcessRowUpdate({ ...params.row, AnnualBasis: value });
+    }, 1500),
+    []
+  );
+
+  // Handle text changes
+  const handleTextChange = (event) => {
+    if (isEditable) {
+      const input = event.target;
+      let newValue = input.value;
+      const cursorPosition = input.selectionStart; // Save the cursor position
+
+      // Add .00 logic if applicable
+      if (!isNaN(newValue) && newValue.indexOf('.') === -1) {
+        newValue = `${newValue}.00`;
       }
-    };
-  
-    return (
-      <TextField
-        value={textValue}
-        onChange={handleTextChange}
-        variant="outlined"
-        size="small"
-        style={{ width: '100%' }}
-        ref={ref}
-        disabled={!isEditable} // Disable the TextField if the grid is not editable
-      />
-    );
-  });
+
+      setTextValue(newValue); // Update the text field value
+
+      // Use debounce to delay cell update
+      debounceUpdateCell(params, newValue);
+
+      // Restore cursor position after state update
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.setSelectionRange(cursorPosition, cursorPosition);
+        }
+      }, 0);
+    }
+  };
+
+  React.useEffect(() => {
+    // Only set focus when manually triggered, not automatically
+    if (inputRef.current && document.activeElement === inputRef.current) {
+      inputRef.current.focus(); // Ensure input is focused
+      inputRef.current.setSelectionRange(inputRef.current.selectionStart, inputRef.current.selectionEnd);
+    }
+  }, [textValue]);
+
+  return (
+    <TextField
+      value={textValue}
+      onChange={handleTextChange}
+      variant="outlined"
+      size="small"
+      style={{ width: '100%' }}
+      inputRef={inputRef} // Attach the ref to the TextField
+      disabled={!isEditable}
+      onFocus={(e) => e.stopPropagation()} // Prevent losing focus by stopping event bubbling
+    />
+  );
+});
+
+
+// Utility function to debounce updates (can be placed in a utility file)
+function debounce(func, wait) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(this, args);
+    }, wait);
+  };
+}
+
+
+  const calculateAndSetBasisValues = (newRow) => {
+    const annualBasisValue = parseFloat(newRow.AnnualBasis);
+    if (!isNaN(annualBasisValue)) {
+      newRow.HalfYearly = (annualBasisValue / 2).toFixed(2);
+      newRow.MonthlyAmount = (annualBasisValue / 12).toFixed(2);
+    } else {
+      // Reset if AnnualBasis is not valid
+      newRow.HalfYearly = '';
+      newRow.MonthlyAmount = '';
+    }
+    return newRow;
+  };
 
   // Handle row updates
   const handleProcessRowUpdate = React.useCallback((newRow) => {
-    const updatedRows = rows.map((row) => {
-      if (row.id === newRow.id) {
-        return { ...row, ...newRow }; // Update the entire row object
-      }
-      return row;
+    setRows((prevRows) => {
+      const updatedRows = prevRows.map((row) => {
+        if (row.id === newRow.id) {
+          // Calculate and update based on new values
+          const updatedRow = calculateAndSetBasisValues(newRow);
+          return { ...row, ...updatedRow };
+        }
+        return row;
+      });
+  
+      console.log('Updated Rows:', updatedRows);
+      return updatedRows;
     });
-    setRows(updatedRows);
+  
     return newRow;
-  }, [rows]);
+  }, [setRows]);
+  
+  
+  
 
+ 
   const addRow = () => {
     // Check if there are no rows and set it to initialRows
     if (rows.length === 0) {
@@ -236,15 +348,25 @@ export default function PtGrid() {
     setRows((prevRows) => [...prevRows, newRow]);
   };
   
+  const handleDelete = (id) => {
+    setRows((prevRows) => {
+      const updatedRows = prevRows.filter((row) => row.id !== id);
+      console.log('Rows after deletion:', updatedRows);
+      return updatedRows;
+    });
+  };
+  
+  
+  
   const handleSave = async () => {
     try {
       // Prepare the formatted rows
       const formattedRows = rows.map(row => 
-        `(${Branch[0].pn_CompanyID}, ${Branch[0].pn_BranchID}, '${vCategoryName}', ${row.id}, ${row.LowerLimit}, '${row.UpperLimit}', ${row.AnnualBasis}, ${row.HalfYearly}, ${row.MonthlyAmount})`
+        `(${Branch[0].pn_CompanyID}, ${Branch[0].pn_BranchID}, '${State}', ${row.id}, ${row.LowerLimit}, '${row.UpperLimit}', ${row.AnnualBasis}, ${row.HalfYearly}, ${row.MonthlyAmount})`
       ).join(',');
   
       // Construct the SQL query
-      const query = `INSERT INTO [dbo].[Professional_Tax] ([pn_companyid],[pn_branchid],[Category_Name],[SlabID],[Lower_limit],[Upper_limit],[Annual_basis],[Half_yearly],[Monthly_Amount]) VALUES ${formattedRows}`;
+      const query = `INSERT INTO [dbo].[Professional_Tax] ([pn_companyid],[pn_branchid],[State],[SlabID],[Lower_limit],[Upper_limit],[Annual_basis],[Half_yearly],[Monthly_Amount]) VALUES ${formattedRows}`;
   
       // Log the query for debugging
       console.log("Query:", JSON.stringify({ query }));
@@ -258,14 +380,14 @@ export default function PtGrid() {
       // Check if the response status is 200 (OK)
       if (response.status === 200) {
         confirmAlert({
-          title: `Data Saved Successfully for ${vCategoryName}`,
+          title: `Data Saved Successfully for ${State}`,
           message: 'Your data has been saved successfully.',
           buttons: [
             {
               label: 'OK',
               onClick: () => {
                 setShowFirstGrid(false); 
-                fetchdata(vCategoryName);
+                fetchdata(State);
                 setRows(initialRows)
                 setIsEditable(true)
               }
@@ -284,13 +406,13 @@ export default function PtGrid() {
 
   const fetchdata = (selectedCategory) => {
     postRequest(ServerConfig.url, REPORTS, {
-      "query": `select SlabID, Category_Name, Lower_limit, Upper_limit, Annual_basis, Half_yearly, Monthly_Amount from Professional_Tax where Category_Name = '${selectedCategory}'`
+      "query": `select SlabID, State, Lower_limit, Upper_limit, Annual_basis, Half_yearly, Monthly_Amount from Professional_Tax where State = '${selectedCategory}'`
     })
     .then(response => {
       console.log("Fetched data for selected category:", response.data);
       const formattedData = response.data.map(row => ({
         id: row.SlabID,
-        categoryName: row.Category_Name,
+        State: row.State,
         LowerLimit: row.Lower_limit, 
         UpperLimit: row.Upper_limit, 
         AnnualBasis: row.Annual_basis,
@@ -311,13 +433,11 @@ export default function PtGrid() {
     setIsEditable(true);
   }
   
-  const handleDelete = (id) => {
-    setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-  };
+  
 
   const handleDeleteRetrievedRow = (id) => {
     const deletedRow = retrievedRows.find((row) => row.id === id);
-    const query = `DELETE FROM Professional_Tax WHERE SlabID = ${id} and Category_Name = '${deletedRow.categoryName}'`;
+    const query = `DELETE FROM Professional_Tax WHERE SlabID = ${id} and State = '${deletedRow.State}'`;
     postRequest(ServerConfig.url, SAVE, { query })
       .then((response) => {
         if (response.status === 200) {
@@ -348,7 +468,7 @@ const handlesaveretrievedrow = () => {
 };
 
 const fieldToColumnMap = {
-  categoryName: 'Category_Name',
+  State: 'State',
   LowerLimit: 'Lower_limit',
   UpperLimit: 'Upper_limit',
   AnnualBasis: 'Annual_basis', // Ensure this matches the exact field name
@@ -389,7 +509,7 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
       UPDATE Professional_Tax
       SET ${columnName} = '${value}'
       WHERE SlabID = ${id}
-      AND Category_Name = '${updatedRow.categoryName}'`;
+      AND State = '${updatedRow.State}'`;
 
     // Execute the update query
     postRequest(ServerConfig.url, SAVE, { query })
@@ -397,7 +517,7 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
         if (response.status === 200) {
           console.log("Cell updated successfully");
           // Optionally, fetch the updated data if you want to ensure consistency
-          fetchdata(updatedRow.categoryName); // Refresh data for the category
+          fetchdata(updatedRow.State); // Refresh data for the category
         } else {
           console.error("Error updating cell");
         }
@@ -415,36 +535,39 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
     { field: 'AnnualBasis', headerName: 'Annual Basis', flex: 1, minWidth: 150, editable: false, headerAlign: 'center', align: 'center',renderCell: (params) => <AnnualBasisCell {...params} />,},
     { field: 'HalfYearly', headerName: 'Half Yearly', flex: 1, minWidth: 120, editable: isEditable, headerAlign: 'center', align: 'center' },
     { field: 'MonthlyAmount', headerName: 'Monthly Amount', flex: 1, minWidth: 120, editable: isEditable, headerAlign: 'center', align: 'center' },
-    {field: 'actions',headerName: '',flex: 0.2,minWidth: 40,renderCell: (params) => (<IconButton variant="outlined" color="error" size="small" onClick={() => handleDelete(params.id)}> <DeleteIcon /> </IconButton> ), headerAlign: 'center', align: 'center',}];
+    {field: 'actions',headerName: '',flex: 0.2,minWidth: 40,renderCell: (params) => (<IconButton variant="outlined" color="error" size="small" onClick={() => handleDelete(params.id)}> <DeleteOutlinedIcon /> </IconButton> ), headerAlign: 'center', align: 'center',}];
 
     const retrievedColumns = [
-      { field: 'categoryName', headerName: 'Category Name', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center', },
+      { field: 'State', headerName: 'State', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center', },
       { field: 'LowerLimit', headerName: 'Lower Limit (Rs.)', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="LowerLimit" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),   },
       { field: 'UpperLimit', headerName: 'Upper Limit (Rs.)', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="UpperLimit" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),    },
       { field: 'AnnualBasis', headerName: 'Annual Basis', flex: 1, minWidth: 120, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="AnnualBasis" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),  },
       { field: 'HalfYearly', headerName: 'Half Yearly', flex: 1, minWidth: 120, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="HalfYearly" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),   },
       { field: 'MonthlyAmount', headerName: 'Monthly Amount', flex: 1, minWidth: 120, headerAlign: 'center', align: 'center',  renderCell: (params) => ( <EditableCell id={params.id} field="MonthlyAmount" value={params.value} onChange={handleRowUpdateForRetrievedGrid} editable={editableRetrievedRowId === params.id && isRetrievedGridEditable} /> ),    },
-      { field: 'actions', headerName: '', flex: 0.2, minWidth: 80, headerAlign: 'center', align: 'center', renderCell: (params) => ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> <IconButton variant="outlined" color="primary" size="small" onClick={() => handleEditRetrievedRow(params.id)}  style={{ marginRight: 8 }}> <EditIcon /> </IconButton> <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRetrievedRow(params.id)} > <DeleteIcon /> </IconButton> </div> ), }, 
+      { field: 'actions', headerName: '', flex: 0.2, minWidth: 80, headerAlign: 'center', align: 'center', renderCell: (params) => ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> <IconButton variant="outlined" color="primary" size="small" onClick={() => handleEditRetrievedRow(params.id)}  style={{ marginRight: 8 }}> <EditIcon /> </IconButton> <IconButton variant="outlined" color="error" size="small" onClick={() => handleDeleteRetrievedRow(params.id)} > <DeleteOutlinedIcon /> </IconButton> </div> ), }, 
     ];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 200, width: '100%' }}>
-      <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'left', marginBottom: '20px' }} >
-      <div style={{width: "200px", position: "relative"}}>
-        <label htmlFor='vCategoryName' style={{ position: "absolute", top:"-10px", left:"10px", backgroundColor:"white", padding:"0 4px", zIndex: 1 }}>
-          Choose Category
-          </label>
-          <select id='vCategoryName' name='vCategoryName' onChange={(e) => {   const selectedCategory = e.target.value; setvCategoryName(selectedCategory);  fetchdata(selectedCategory); }} style={{ height: "50px", width: "100%", padding: "10px" }}>
-  {/* <option value="">Select</option> */}
-  {Category.map((e) => (
-    <option key={e.vCategoryName} value={e.vCategoryName}>
-      {e.vCategoryName}
-    </option>
-  ))}
-</select>
-      </div>
+  <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'left', marginBottom: '20px' }} >
+    <div style={{ width: "200px", position: "relative" }}>
+      <label htmlFor='State' style={{ position: "absolute", top: "-10px", left: "10px", backgroundColor: "white", padding: "0 4px", zIndex: 1 }}>
+        State
+      </label>
+      <TextField
+        id='State'
+        name='State'
+        value={Branch.length > 0 ? Branch[0].State : ''} // Display the mapped value from Branch
+        style={{ height: "50px", width: "100%", padding: "10px" }}
+        variant="outlined"
+        InputProps={{
+          readOnly: true, // Make the field read-only so it can't be edited
+        }}
+      />
+    </div>
+  </Grid>
 
-    </Grid>
+
     
     {showFirstGrid && (
       <div style={{ flex: 1 }}>
@@ -464,9 +587,9 @@ const handleRowUpdateForRetrievedGrid = (id, field, value) => {
           <Button variant="outlined" color="primary" size="small" onClick={handleSave} style={{ marginRight: 8 }}>
             Save
           </Button>
-          <Button variant="contained" color="success" size="small" onClick={handleEdit}>
+          {/* <Button variant="contained" color="success" size="small" onClick={handleEdit}>
             Edit
-          </Button>
+          </Button> */}
         </div>
       </div>
     )}

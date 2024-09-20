@@ -19,6 +19,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import Sidenav from "../Home Page/Sidenav";
 import Navbar from "../Home Page/Navbar"
 import {Link} from '@mui/material';
+import BookIcon from '@mui/icons-material/Book';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,13 +53,14 @@ const useStyles = makeStyles((theme) => ({
     },
     text: {
         marginRight: theme.spacing(2),
-        fontSize: "18px",
+        fontSize: "16px",
         
         
     },
     button: {
         backgroundColor: "none",
         color: 'blue',
+        cursor:'pointer'
        
     },
 }));
@@ -67,63 +69,58 @@ const MastersTemplate = () => {
     const navigate =useNavigate();
     const classes = useStyles();
     const documents = [
-        {
-            title: "Company",
-            icon: <img src={PaymCompany} width={40} height={40} />,
-            buttonLabel:"View",
-            onClick: () => navigate("/CompanyForm01"),
-          },
-        {
-            title: "Branch",
-            icon: <img src={PaymBranch} width={40} height={40} />,
-            buttonLabel:"View",
-            onClick: () => navigate("/PayBranchForm01"),
-          },
-          {
-            title: "Employee",
-            icon: <img src={PaymEmplo} width={40} height={40} />,
-            buttonLabel:"View",
-            onClick: () => navigate("/PaymEmployeeMasters"),
-          },
-          {
-            title: "Department",
-            icon: <img src={PaymDep} width={40} height={40} />,
-            buttonLabel:"View",
-            onClick: () => navigate("/Departmensmasters"),
-          },
-          {
-            title: "Designation",
-            icon: <img src={PaymDesig} width={40} height={40} />,
-            buttonLabel:"View",
-            onClick: () => navigate("/DesignationMasters"),
-          },
-          {
-            title: "Shift Related",
-            icon: <img src={shiftreee} width={40} height={40} />,
-            buttonLabel:"View",
-            onClick: () => navigate("/ShiftMasters"),
-          },
+        // {
+        //     title: "Company",
+        //     icon: <img src={PaymCompany} width={40} height={40} />,
+        //     buttonLabel:"View",
+        //     onClick: () => navigate("/CompanyForm01"),
+        //   },
+        // {
+        //     title: "Branch",
+        //     icon: <img src={PaymBranch} width={40} height={40} />,
+        //     buttonLabel:"View",
+        //     onClick: () => navigate("/PayBranchForm01"),
+        //   },
+        //   {
+        //     title: "Employee",
+        //     icon: <img src={PaymEmplo} width={40} height={40} />,
+        //     buttonLabel:"View",
+        //     onClick: () => navigate("/PaymEmployeeMasters"),
+        //   },
+        //   {
+        //     title: "Department",
+        //     icon: <img src={PaymDep} width={40} height={40} />,
+        //     buttonLabel:"View",
+        //     onClick: () => navigate("/Departmensmasters"),
+        //   },
+        //   {
+        //     title: "Designation",
+        //     icon: <img src={PaymDesig} width={40} height={40} />,
+        //     buttonLabel:"View",
+        //     onClick: () => navigate("/DesignationMasters"),
+        //   },
+        //   {
+        //     title: "Shift Related",
+        //     icon: <img src={shiftreee} width={40} height={40} />,
+        //     buttonLabel:"View",
+        //     onClick: () => navigate("/ShiftMasters"),
+        //   },
           {
             title: "Earn & Deduct",
-            icon: <img src={PaymCompany} width={40} height={40} />,
+            icon: <img src={PaymCompany} width={25} height={25} />,
             buttonLabel:"View",
             onClick: () => navigate("/EarnDeductMasters"),
           },
          
           {
-            title: "Group",
-            icon: <img src={PaymDep} width={40} height={40} />,
+            title: "Slab",
+            icon: <BookIcon/>,
             buttonLabel:"View",
-            onClick: () => navigate("/Group"),
+            onClick: () => navigate("/SlabTemplateEmp"),
           },
          
          
-          {
-            title: "Set up",
-            icon: <img src={setup} width={40} height={40} />,
-            buttonLabel:"View",
-            onClick: () => navigate("/Setup"),
-          },
+        
     ];
 
     return (
@@ -144,7 +141,7 @@ const MastersTemplate = () => {
             <Typography variant="body1">
                 This is a Masters Setion.. Here you can predefine some of the details and use it later in the setup section..
             </Typography>
-            <Grid container spacing={3} mt={3}>
+            <Grid container spacing={4} mt={4}>
                 {documents.map((doc, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index} >
                         <div className={classes.item}>

@@ -242,6 +242,11 @@ import Attendance01 from "./components/Masters/Attendance/Attendance1";
 import LeaveRequestHr from "./components/Masters/LeaveApprove/Leaveapprove";
 import ReimbursementApprovalForm from "./components/Masters/Reimbursment/Reimbursement";
 import EmployeeReimbursement from "./components/Masters/Reimbursment/Reimbursement";
+import EarnDeductMasterss from "./components/Masters/EarnDeduct/EarnDeduct";
+import Employeeprofilee0909090 from "./components/Masters/EmployeeCree/EmployeePrfile1Org";
+import Sandy from "./components/Masters/EmployeeCree/EmployeePrfile1Org";
+import EarnDeductValueMasters from "./components/Masters/EarnDeduct/EarnductValues";
+import EarnDeductMastersss from "./components/Masters/EarnDeduct/EarnDeduct";
 
 const store = createStore(entityReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -265,8 +270,8 @@ root.render(
           <Route path="/Departmensmasters" element={<Departmensmasters/>}/>
           <Route path="/DesignationMasters" element={<DesignationMasters/>}/>
           <Route path="/ShiftMasters" element={<ShiftMasters/>}/>
-          <Route path="/EarnDeductMasters" element={<EarnDeductMasters/>}/>
-          <Route path="/EarnDeductMasters" element={<EarnDeductMasters/>}/>
+          {/* <Route path="/EarnDeductMasters" element={<EarnDeductMasters/>}/>
+          <Route path="/EarnDeductMasters" element={<EarnDeductMasters/>}/> */}
           <Route path="/Group" element={<GroupUi/>}/>
           <Route path="/Group/addinfos" element={<AddInfos/>}/>
           <Route path="/EmployeeShift" element={<GroupShift/>}/>
@@ -306,7 +311,8 @@ root.render(
              <Route path="/Attendance01" element={<Attendance01/>}></Route>
              <Route path="/LeaveRequestHr" element={<LeaveRequestHr/>}></Route>
              <Route path="/EmployeeReimbursement" element={<EmployeeReimbursement/>}></Route>
-          {/* <Route path="/layout" element={<Layoutcomp />} />
+             <Route path="/EarnDeductMasters" element={<EarnDeductMastersss/>}/>
+             <Route path="/EarnDeductValueMaters" element={<EarnDeductValueMasters/>}/>          {/* <Route path="/layout" elem ent={<Layoutcomp />} />
           <Route path="/att" element={<BasicDateCalendar />} />
           <Route path="/home" element={<ServiceCard />}></Route>
           <Route path="/AssetsTable" element={<AssetsTable />}></Route>
