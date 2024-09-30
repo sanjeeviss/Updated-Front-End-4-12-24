@@ -75,6 +75,8 @@ export default function PaymEmployeeFormm() {
     permanantaddress:"",
     Aadharcard:"",
     FatherName:"",
+    Email:"",
+    AlternateEmail:""
 
   });
 
@@ -174,7 +176,19 @@ export default function PaymEmployeeFormm() {
          if (!formData.employeeLastName) newErrors.employeeLastName = "This field is required enter the 50 characters";
        if (!formData.BloodGroup) newErrors.BloodGroup = "This field is required enter the 20 characters";
        if (!formData.permanantaddress) newErrors.permanantaddress = "This field is required enter the 20 characters";
+  // Validate primary email
+  if (!formData.Email) {
+    newErrors.Email = "This field is required.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.Email)) {
+    newErrors.Email = "Please enter a valid email address.";
+  }
 
+  // Validate alternate email
+  if (!formData.AlternateEmail) {
+    newErrors.AlternateEmail = "This field is required.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.AlternateEmail)) {
+    newErrors.AlternateEmail = "Please enter a valid email address.";
+  }
        if (!formData.Aadharcard) {
         newErrors.Aadharcard = "This field is required";
       } else if (!/^\d{12}$/.test(formData.Aadharcard)) {
@@ -253,7 +267,8 @@ export default function PaymEmployeeFormm() {
           [Branch_Name], [Account_Type], [MICR_code], [IFSC_Code], [Other_Info],
           [Reporting_person], [ReportingID], [Reporting_email], [Pan_no], [salary_type],
           [TDS_Applicable], [Flag], [role], [Blood_Group], [Phone_No], [Alternate_Phone_No],
-          [permanent_address], [Aadhar_Card], [Current_Address], [accountNo],[Father_Name]
+          [permanent_address], [Aadhar_Card], [Current_Address], [accountNo],[Father_Name] ,[Email]
+      ,[Alternate_Email]
         ) VALUES (
           ${formData.pn_CompanyID}, ${formData.pn_BranchID}, '${formData.employeeCode}',
           '${formData.employeeFirstName}', '${formData.employeeMiddleName}', '${formData.employeeLastName}',
@@ -265,7 +280,9 @@ export default function PaymEmployeeFormm() {
           ${formData.reportingId}, '${formData.reportingEmail}', '${formData.panNo}', '${formData.salaryType}',
           '${formData.tdsApplicable}', '${formData.flag}', ${formData.role}, '${formData.BloodGroup}',
           '${formData.PhoneNo}', '${formData.AlternatePhoneNo}', '${formData.permanantaddress}',
-          '${formData.Aadharcard}', '${formData.CurrentAddress}', '${formData.accountNo}','${formData.FatherName}'
+          '${formData.Aadharcard}', '${formData.CurrentAddress}', '${formData.accountNo}','${formData.FatherName}',
+          '${formData.Email}','${formData.AlternateEmail}'
+
         )
       `;
   
@@ -276,7 +293,7 @@ export default function PaymEmployeeFormm() {
   
       if (save && save.status === 200) {
         alert("Data saved successfully");
-        navigate("/Employeeprofile0909090");
+        navigate("/Employeeprofile0909");
       } else {
         alert("Failed to save data");
       }
@@ -640,6 +657,41 @@ export default function PaymEmployeeFormm() {
                           error={!!errors.AlternatePhoneNo}
                           helperText={errors.AlternatePhoneNo}
                           value={formData.AlternatePhoneNo}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                         label={
+                          <span>
+                           Email
+                            <span style={{ color: 'red'}}>*</span>
+                          </span>
+                         }
+                          name="Email"
+                          // label="Full Name"
+                          variant="outlined"
+                          fullWidth
+                          InputLabelProps={{ shrink: true }}
+                          //required
+                          error={!!errors.Email}
+                          helperText={errors.Email}
+                          value={formData.Email}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                         label="Alternate Email"
+                          name="AlternateEmail"
+                          // label="Full Name"
+                          variant="outlined"
+                          fullWidth
+                          InputLabelProps={{ shrink: true }}
+                          //required
+                          error={!!errors.AlternateEmail}
+                          helperText={errors.AlternateEmail}
+                          value={formData.AlternateEmail}
                           onChange={handleInputChange}
                         />
                       </Grid>

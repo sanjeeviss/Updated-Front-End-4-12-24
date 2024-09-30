@@ -231,7 +231,6 @@ import Dashboard from "./components/Home Page/dashboard/DBoard";
 import DBoards from "./components/Home Page/dashboard/DBoard";
 import EmployeeHome220 from "./components/Masters/EmployeeCree/EmployeeMater";
 import PaymEmployeeForm0045 from "./components/Masters/EmployeeCree/Employeeprofile";
-import Employeeprofile0909090 from "./components/Masters/EmployeeCree/EmployeePrfile1Org";
 import PaymEmployeeFormCs from "./components/Masters/EmployeeCree/Employeeprofile";
 import HolidaysPage from "./components/Masters/HolidayHr/Holiday";
 import HolidayForm1 from "./components/Masters/HolidayHr/HolidayHr";
@@ -243,10 +242,12 @@ import LeaveRequestHr from "./components/Masters/LeaveApprove/Leaveapprove";
 import ReimbursementApprovalForm from "./components/Masters/Reimbursment/Reimbursement";
 import EmployeeReimbursement from "./components/Masters/Reimbursment/Reimbursement";
 import EarnDeductMasterss from "./components/Masters/EarnDeduct/EarnDeduct";
-import Employeeprofilee0909090 from "./components/Masters/EmployeeCree/EmployeePrfile1Org";
 import Sandy from "./components/Masters/EmployeeCree/EmployeePrfile1Org";
 import EarnDeductValueMasters from "./components/Masters/EarnDeduct/EarnductValues";
 import EarnDeductMastersss from "./components/Masters/EarnDeduct/EarnDeduct";
+import Employeeprofile0909 from "./components/Masters/EmployeeCree/EmployeePrfile1Org";
+import Editprofile from "./components/Masters/EmployeeCree/Viewprofile";
+import EditEmployee from "./components/Masters/EmployeeCree/EditProfile1";
 
 const store = createStore(entityReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -305,14 +306,18 @@ root.render(
              <Route path="/EmployeeHome" element={<EmployeeHome/>}></Route>
              <Route path="/PaymEmployeeForm0045" element={<PaymEmployeeForm0045/>}></Route>
              <Route path="/PaymEmployeeFormm" element={<PaymEmployeeFormm/>}/>
-             <Route path="/Employeeprofile0909090" element={<Employeeprofile0909090/>}></Route>
              <Route path="/HolidaysPage" element={<HolidaysPage/>}></Route>
              <Route path="/HolidayForm1" element={<HolidayForm1/>}></Route>
              <Route path="/Attendance01" element={<Attendance01/>}></Route>
              <Route path="/LeaveRequestHr" element={<LeaveRequestHr/>}></Route>
              <Route path="/EmployeeReimbursement" element={<EmployeeReimbursement/>}></Route>
              <Route path="/EarnDeductMasters" element={<EarnDeductMastersss/>}/>
-             <Route path="/EarnDeductValueMaters" element={<EarnDeductValueMasters/>}/>          {/* <Route path="/layout" elem ent={<Layoutcomp />} />
+             <Route path="/Employeeprofile0909" element={<Employeeprofile0909/>}/>
+
+             <Route path="/EarnDeductValueMaters" element={<EarnDeductValueMasters/>}/> 
+             <Route path="/Editprofile/:employeeId" element={<Editprofile/>} />   
+             <Route path="/EditEmployee/:employeeId"  element={<EditEmployee/>}/>
+                           {/* <Route path="/layout" elem ent={<Layoutcomp />} />
           <Route path="/att" element={<BasicDateCalendar />} />
           <Route path="/home" element={<ServiceCard />}></Route>
           <Route path="/AssetsTable" element={<AssetsTable />}></Route>

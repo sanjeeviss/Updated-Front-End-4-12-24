@@ -33,3 +33,10 @@ export async function putRequest(url, controller, data) {
     },
   });
 }
+export async function deleteRequest(url, controller, data) {
+  return await axios.delete(url + controller, data, {
+    headers: {
+      "X-Special-Header": sessionStorage.getItem("jwt"),
+    },
+  });
+}
