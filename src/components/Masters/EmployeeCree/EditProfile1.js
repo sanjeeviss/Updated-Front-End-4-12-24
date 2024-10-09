@@ -13,7 +13,7 @@ import {
   Paper,
   IconButton,  
 } from '@material-ui/core';
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from '@mui/icons-material/Edit';
 
 import nodata from '../../../images/NoDataImage.jpeg';
 
@@ -224,17 +224,48 @@ const handleUpdate = async () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <Grid container justifyContent="center" style={{ margin: '20px' }}>
-      <Paper style={{ padding: '20px', width: '100%', maxWidth: '600px' }}>
+    <Grid container style={{ margin: '20px' }}>
+      <Paper style={{ padding: '20px', width: '100%',  }}>
+        <Grid style={{textAlign:'left'}}>
         <Typography variant="h4" style={{paddingBottom:"10px"}}>Edit Employee</Typography>
-       
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-          <Avatar
-            src={image_data ?` data:image/jpeg;base64,${image_data}` : nodata}
-            alt="Employee Avatar"
-            style={{ width: 100, height: 100 }}
-            onChange={handleImageChange}
-          />
+       </Grid>
+       <Grid style={{width:"300px",backgroundColor:"#608fc4",height:'210px',padding:'15px' }}>
+      
+       <Grid>
+      <div style={{
+        position: 'relative',
+        border: '3px solid #edf1f5',  // Outer border
+        borderRadius: '54px',        // Adjust based on the img borderRadius + extra padding
+        padding: '4px',              // Space between the outer and inner border
+        display: 'inline-block',
+        backgroundColor: '#608fc4'   // Optional background between borders
+      }}>
+        <img
+          src={image_data ? `data:image/jpeg;base64,${image_data}` : nodata}
+          alt="Employee Avatar"
+          width={100}
+          height={100}
+          style={{
+            borderRadius: '50px', 
+            border: '2px solid black',  // Inner border
+            backgroundColor: '#f0f0f0'
+          }}
+        />
+
+        {/* Edit icon positioned on the image edge */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          backgroundColor: '#ffffff',
+          borderRadius: '50%',
+        
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* Hidden file input */}
           <input
             accept="image/*"
             style={{ display: 'none' }} // Hide the file input
@@ -248,8 +279,12 @@ const handleUpdate = async () => {
             </IconButton>
           </label>
         </div>
-
+      </div>
+    </Grid>
+</Grid>
     
+       
+
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <TextField

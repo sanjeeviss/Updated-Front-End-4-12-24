@@ -29,11 +29,13 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "aos": "^2.3.4",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "crypto-js": "^4.2.0",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
+    "formik": "^2.4.6",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",
     "jspdf": "^2.5.1",
@@ -55,6 +57,7 @@
     "redux-thunk": "^3.1.0",
     "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4",
+    "yup": "^1.4.0",
     "zustand": "^4.5.2"
   },
   "scripts": {

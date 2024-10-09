@@ -7,11 +7,20 @@ import { postRequest } from '../../../serverconfiguration/requestcomp';
 import { ServerConfig } from '../../../serverconfiguration/serverconfig';
 import { REPORTS } from '../../../serverconfiguration/controllers';
 import { useParams } from 'react-router-dom'; // Ensure this line is present
-
+import AOS from 'aos'; // Import AOS
+import 'aos/dist/aos.css'; // Import AOS CSS
 function Editprofile() {
   const { employeeId } = useParams(); // Get employeeId from the URL
   const [employeeDetails, setEmployeeDetails] = useState([]); // Correct initialization
   const [emp, setEmp] = useState([]);
+
+
+  useEffect(() => {
+    AOS.init({
+        duration: 1000, // Set to 1 second for quick animation
+        easing: 'ease-in-out', // Optional: Choose an easing function
+    });
+}, []);
   const fetchEmployeeDetails = async () => {
     try {
       const query = `SELECT e.pn_EmployeeID, e.EmployeeCode, e.Employee_Full_Name, e.Email,e.permanent_address,e.Current_Address,e.CTC,e.basic_salary, e.Phone_No, e.Gender, e.status, ep.image_data, d.v_DepartmentName, ds.v_DesignationName 
@@ -55,6 +64,7 @@ function Editprofile() {
           style={{ marginLeft: "auto", marginRight: "auto", margin: "50px 50px 50px 50px" }}  
           >
 <Typography fontWeight={'500'} fontSize={'25px'}>Employee Profile View</Typography>
+<div data-aos="fade-down-left">
             <Grid xs={12} sm={4} paddingTop={'20px'} >
                 <Grid style={{width:"300px",height:"210px",backgroundColor:"#608fc4",padding:'15px'}}>
                 {employeeDetails.map((emp) => (
@@ -197,6 +207,7 @@ function Editprofile() {
   </Grid> 
          
             </Grid>
+            </div>
           </Grid>
           <Grid xs={12} sm={8} width={'700px'}  style={{ marginLeft: "auto", marginRight: "auto", margin: "100px 50px 50px 0" }}>
           <Typography textAlign={'left'} fontSize={'16px'} fontWeight={'bold'}>Basic Details</Typography>

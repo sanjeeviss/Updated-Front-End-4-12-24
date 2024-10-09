@@ -58,7 +58,7 @@ function LoginOthers(props) {
         changeState(true);
         sessionStorage.setItem("user", username);
 
-        navigate("/HomePage");
+        navigate("/HomePage1");
         setError("");
         getRequest(ServerConfig.url, PAYMCOMPANIES).then((e) => {
           var COMPANYdet = e.data.filter((s) => s.companyUserId == username);
@@ -132,10 +132,10 @@ function LoginOthers(props) {
             var branchdet = e.data.filter((s) => s.employeeCode == username);
             if (branchdet[0].role == 1) {
               sessionStorage.setItem("role", "hr");
-              navigate("/dashboared");
+              navigate("/");
             } else if (branchdet[0].role == 4) {
               sessionStorage.setItem("role", "employee");
-              navigate("/HomePage");
+              navigate("/HomePage2");
             } else if (branchdet[0].role == 2) {
               sessionStorage.setItem("role", "accounts");
             } else if (branchdet[0].role == 3) {

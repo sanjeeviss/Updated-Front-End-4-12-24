@@ -55,7 +55,7 @@ function LoginForm(props) {
         changeState(true);
         sessionStorage.setItem("user", username);
 
-        navigate("/HomePage");
+        navigate("/HomePage2");
         setError("");
         getRequest(ServerConfig.url, PAYMEMPLOYEE).then((e) => {
           var branchdet = e.data.filter((s) => s.employeeCode == username);

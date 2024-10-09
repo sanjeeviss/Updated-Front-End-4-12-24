@@ -267,7 +267,6 @@ const Employeeprofile0909 = () => {
       if (profileImage) {
         reader.readAsArrayBuffer(profileImage); // Convert file to ArrayBuffer
       }    } 
-    
   //   else {
   //     const response = await postRequest(ServerConfig.url, SAVE, {
   //       query: `

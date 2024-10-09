@@ -26,18 +26,11 @@ import { useAppStore } from "./appStore";
 import { useLocation } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import React, { useState, useEffect } from 'react';
-import PeopleIcon from "@mui/icons-material/People";
 import TodayIcon from "@mui/icons-material/Today";
-import payroll from "../../images/Payroll-icon.png"
-import PaidIcon from '@mui/icons-material/Paid';
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import DeckIcon from '@mui/icons-material/Deck';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import SettingsIcon from '@mui/icons-material/Settings';
-import BadgeIcon from '@mui/icons-material/Badge';
-import { Icon } from "@material-ui/core";
-import  desig from"../../images/paym-desiganation-icon.png"
-import Groups3Icon from '@mui/icons-material/Groups3';
+
 const drawerWidth = 210;
 
 const openedMixin = (theme) => ({
@@ -116,6 +109,7 @@ export default function Sidenav() {
       navigate("/Masters"); // Navigate to the DBoards page when the dashboard button is clicked
     }
   };
+
   const handleLeaveClick = () => {
     setOpenLeave(!openLeave);
   };
@@ -148,7 +142,7 @@ export default function Sidenav() {
             </Box>
           </ListItem>
 
-        <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/DBoards")}>
+        <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/EmployeeDashBoard2")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -174,8 +168,8 @@ export default function Sidenav() {
               <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
           </ListItem>
-{/* 
-          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/Attendancewise1")}>
+
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/BasicDateCalendar2")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -196,7 +190,7 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <AccessTimeIcon />
+                <TodayIcon />
               </ListItemIcon>
               <ListItemText primary="Attendance" sx={{ opacity: open ? 1 : 0, color: "white" }} />
               {open && (
@@ -207,9 +201,9 @@ export default function Sidenav() {
                 </Collapse>
               )}
             </ListItemButton>
-          </ListItem> */}
+          </ListItem>
 
-          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/HomePage")}>
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/HomePage2")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -235,8 +229,9 @@ export default function Sidenav() {
               <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
           </ListItem>
-
-          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/DepartmentHome")}>
+        
+{/* 
+          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/App001")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -257,100 +252,14 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <Groups3Icon />
-              </ListItemIcon>
-              <ListItemText primary="Department" sx={{ opacity: open ? 1 : 0, color: "white" }} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/DesignationHome")}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-                transition: "transform 0.4s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "#7f7f7f",
-                  transform: "scale(1.10)",
-                },
-              }}
-            >
-            <ListItemIcon
-              sx={{
-                color: "white",
-                minWidth: 0,
-                mr: open ? 3 : "auto",
-                justifyContent: "center",
-              }}
-            >
-  
-  {/* //   minWidth: 0,
-  //   mr: open ? 3 : "auto",
-  //   justifyContent: "center",
-  //   backgroundColor: "", // Set the background color
-  //   borderRadius: "50%", // Optional: make the background circular
-  //  */}
-
-  {/* <img src={desig} alt="Designation Icon" style={{ width: 30, height: 30 }} /> */}
-  <BadgeIcon/>
-</ListItemIcon>
-              <ListItemText primary="Designation" sx={{ opacity: open ? 1 : 0, color: "white" }} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/EmployeeHome")}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-                transition: "transform 0.4s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "#7f7f7f",
-                  transform: "scale(1.10)",
-                },
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  color: "white",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="All Employees" sx={{ opacity: open ? 1 : 0, color: "white" }} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/Attendance01")}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-                transition: "transform 0.4s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "#7f7f7f",
-                  transform: "scale(1.10)",
-                },
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  color: "white",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <TodayIcon />
+                <DashboardIcon />
               </ListItemIcon>
               <ListItemText primary=" Attendance" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/Masters")}>
+        
+
+          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/LeaveapplyHr")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -371,13 +280,65 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <PaidIcon />
+                <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary="Payroll" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+              <ListItemText primary="Leaves" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/LeaveRequestTable")}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                transition: "transform 0.4s ease-in-out",
+                "&:hover": {
+                  backgroundColor: "#7f7f7f",
+                  transform: "scale(1.10)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "white",
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Leaves History" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/LeaveRequestHr")}>
+  <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/HolidaysHrPage")}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                transition: "transform 0.4s ease-in-out",
+                "&:hover": {
+                  backgroundColor: "#7f7f7f",
+                  transform: "scale(1.10)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "white",
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Holiday" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+            </ListItemButton>
+          </ListItem> */}
+                    <ListItem disablePadding sx={{ display: "block" }} onClick={handleSalaryClick}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -400,11 +361,107 @@ export default function Sidenav() {
               >
                 <AssignmentIcon />
               </ListItemIcon>
-              <ListItemText primary="Leaves" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+              <ListItemText primary="Leave" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+              {open && (openSalary ? <ExpandLessIcon sx={{ color: "white" }} /> : <ExpandMoreIcon sx={{ color: "white" }} />)}
             </ListItemButton>
           </ListItem>
 
-  <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/HolidaysPage")}>
+          {open && (
+            <Collapse in={openSalary} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/LeaveapplyHr2")}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                      ml:6,
+                      transition: "transform 0.4s ease-in-out",
+                      "&:hover": {
+                        backgroundColor: "#7f7f7f",
+                        transform: "scale(1.10)",
+                      },
+                    }}
+                  >
+                    <ListItemText primary="Apply" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+                  </ListItemButton>
+                </ListItem>
+                
+                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/LeaveRequestTable2")}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                      ml:6,
+                      transition: "transform 0.4s ease-in-out",
+                      "&:hover": {
+                        backgroundColor: "#7f7f7f",
+                        transform: "scale(1.10)",
+                      },
+                    }}
+                  >
+                    <ListItemText primary="Leave Status" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+                  </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/LeaveBalances2")}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                      ml:6,
+                      transition: "transform 0.4s ease-in-out",
+                      "&:hover": {
+                        backgroundColor: "#7f7f7f",
+                        transform: "scale(1.10)",
+                      },
+                    }}
+                  >
+                    <ListItemText primary="Leave Balance" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/LeaveCalendar2")}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                      ml:6,
+                      transition: "transform 0.4s ease-in-out",
+                      "&:hover": {
+                        backgroundColor: "#7f7f7f",
+                        transform: "scale(1.10)",
+                      },
+                    }}
+                  >
+                    <ListItemText primary="Leave Calendar" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+                  </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/HolidaysPage2")}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                      ml:6,
+                      transition: "transform 0.4s ease-in-out",
+                      "&:hover": {
+                        backgroundColor: "#7f7f7f",
+                        transform: "scale(1.10)",
+                      },
+                    }}
+                  >
+                    <ListItemText primary="Holiday Calendar" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+                  </ListItemButton>
+                </ListItem>
+
+              </List>  
+            </Collapse>
+          )} 
+          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/ReimbursementForm2")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -425,38 +482,12 @@ export default function Sidenav() {
                   justifyContent: "center",
                 }}
               >
-                <DeckIcon />
+                <CurrencyExchangeIcon/>
               </ListItemIcon>
-              <ListItemText primary="Holiday" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+              <ListItemText primary="Reimbursement" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/EmployeeReimbursement")}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-                transition: "transform 0.4s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "#7f7f7f",
-                  transform: "scale(1.10)",
-                },
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  color: "white",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                < CurrencyExchangeIcon/>
-              </ListItemIcon>
-              <ListItemText primary="Reimburesemnt" sx={{ opacity: open ? 1 : 0, color: "white" }} />
-            </ListItemButton>
-          </ListItem>
-          {/* <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/Masters")}>
+          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/Masters")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -481,81 +512,16 @@ export default function Sidenav() {
               </ListItemIcon>
               <ListItemText primary="Settings" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
-          </ListItem> */}
-{/* 
-          <ListItem disablePadding sx={{ display: "block" }} onClick={handleSalaryClick}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-                transition: "transform 0.4s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "#7f7f7f",
-                  transform: "scale(1.10)",
-                },
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  color: "white",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <PaymentIcon />
-              </ListItemIcon>
-              <ListItemText primary="Salary" sx={{ opacity: open ? 1 : 0, color: "white" }} />
-              {open && (openSalary ? <ExpandLessIcon sx={{ color: "white" }} /> : <ExpandMoreIcon sx={{ color: "white" }} />)}
-            </ListItemButton>
           </ListItem>
 
-          {open && (
-            <Collapse in={openSalary} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/salary/view")}>
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
-                      transition: "transform 0.4s ease-in-out",
-                      "&:hover": {
-                        backgroundColor: "#7f7f7f",
-                        transform: "scale(1.10)",
-                      },
-                    }}
-                  >
-                    <ListItemText primary="View Salary" sx={{ opacity: open ? 1 : 0, color: "white" }} />
-                  </ListItemButton>
-                </ListItem>
 
-                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/salary/history")}>
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
-                      transition: "transform 0.4s ease-in-out",
-                      "&:hover": {
-                        backgroundColor: "#7f7f7f",
-                        transform: "scale(1.10)",
-                      },
-                    }}
-                  >
-                    <ListItemText primary="Salary History" sx={{ opacity: open ? 1 : 0, color: "white" }} />
-                  </ListItemButton>
-                </ListItem>
-              </List>  
-            </Collapse>
-          )} */}
-            {/* <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/info")}>
+            <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/info")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
+                
                 transition: "transform 0.4s ease-in-out",
                 "&:hover": {
                   backgroundColor: "#7f7f7f",
@@ -575,7 +541,7 @@ export default function Sidenav() {
               </ListItemIcon>
               <ListItemText primary="Info" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
-          </ListItem> */}
+          </ListItem>
         </List>
       </Drawer>
 

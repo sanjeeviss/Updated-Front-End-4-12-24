@@ -166,7 +166,6 @@ import AttendanceNew from "./components/Attendance/Attendance";
 import OtHrsNewForm from "./components/OtHrsNew/OtHrsNewForm";
 import LoginOthers from "./components/Authentication/LoginOthers";
 import DashBoard from "./components/dashboredsss/DashBoard";
-import EmployeeDashBoard from "./components/Nattendance/EmployeeDashBoard";
 import BasicDateCalendar from "./components/Nattendance/Nattendance";
 import GroupUi from "./components/Group UI/GroupUi";
 import Chatbot from "./components/Chatbot/chatbot";
@@ -248,6 +247,32 @@ import EarnDeductMastersss from "./components/Masters/EarnDeduct/EarnDeduct";
 import Employeeprofile0909 from "./components/Masters/EmployeeCree/EmployeePrfile1Org";
 import Editprofile from "./components/Masters/EmployeeCree/Viewprofile";
 import EditEmployee from "./components/Masters/EmployeeCree/EditProfile1";
+import DesignationMaster from "./components/Masters/Designation/Designation";
+import DepartmentMaster from "./components/Masters/Department/Department";
+import DepartmentHome from "./components/Masters/Department/DepartmentMaster";
+import DesignationHome from "./components/Masters/Designation/Designationmaster";
+import SlideAnimationComponent from "./components/timecard";
+import HomePage1 from "./component/Home Page-comapny/HomePage1";
+import CompanyMasterss1 from "./component/Masters-company/CompanyMasters1";
+import BranchMaster1 from "./component/Masters-company/BranchMaster1";
+import CategoryFormMaster1 from "./component/Masters-company/CategoryMater1";
+import DivisionMaster1 from "./component/Masters-company/Division1";
+import DepartmentFormMaster1 from "./component/Masters-company/DepartmentMasters1";
+import DesignationMasterForm1 from "./component/Masters-company/DesignationMasters1";
+import GradeForm1 from "./component/Masters-company/Grade1";
+import ShiftFormMaster1 from "./component/Masters-company/ShiftDetailsMaster1";
+import JobStatusFormMaster1 from "./component/Masters-company/Jobstatus1";
+import LevelFormMaster1 from "./component/Masters-company/LevelMaster1";
+import PaymLeaveMaster1 from "./component/Masters-company/PaymLeaveMaster1";
+import HomePage2 from "./Component1/Home Page3/HomePage2";
+import HolidaysPage2 from "./Component1/Masters/Leaveapply/Holiday2";
+import LeaveapplyHr2 from "./Component1/Masters/Leaveapply/Leaveapply2";
+import LeaveRequestTable2 from "./Component1/Masters/Leaveapply/LeaveApplyHistory2";
+import LeaveBalances2 from "./Component1/Masters/Leaveapply/LeaveBalance2";
+import LeaveCalendar2 from "./Component1/Masters/LeaveCalender2";
+import ReimbursementForm2 from "./Component1/Masters/Reimbursement2";
+import EmployeeDashBoard2 from "./Component1/Nattendance Epm/EmployeeDashBoard2";
+import BasicDateCalendar2 from "./Component1/Nattendance Epm/Nattendance2";
 
 const store = createStore(entityReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -259,10 +284,12 @@ root.render(
       <br></br>
       <br></br>
       <br></br> */}
-
       <Routes>
         <Route path="/" element={<App />}>
           <Route path="/loginemployee" element={<LoginOthers />} />
+
+          {/*login Branch---------------------------------------------------------------------------------------------------*/}
+
           <Route path="/HomePage" element={<HomePage/>}></Route>
           <Route path="/Masters" element={<MastersTemplate />} />
           <Route path="/CompanyForm01" element={<CompanyMasters/>}/>
@@ -271,8 +298,6 @@ root.render(
           <Route path="/Departmensmasters" element={<Departmensmasters/>}/>
           <Route path="/DesignationMasters" element={<DesignationMasters/>}/>
           <Route path="/ShiftMasters" element={<ShiftMasters/>}/>
-          {/* <Route path="/EarnDeductMasters" element={<EarnDeductMasters/>}/>
-          <Route path="/EarnDeductMasters" element={<EarnDeductMasters/>}/> */}
           <Route path="/Group" element={<GroupUi/>}/>
           <Route path="/Group/addinfos" element={<AddInfos/>}/>
           <Route path="/EmployeeShift" element={<GroupShift/>}/>
@@ -283,12 +308,7 @@ root.render(
           <Route path="/Attendance" element={<AttendanceHome/>}/>
           <Route path="/AssetsTable" element={<AssetsTable />}></Route>
           <Route path="/EarnDeductTable" element={<EarnDeductTable />}></Route>
-          {/* <Route path="/PaymBranchtable" element={<PaymBranchtable />}></Route> */}
-          {/* <Route path="/SpreadGrid" element={<MySpreadGrid/>}></Route> */}
-          {/* <Route path="/ResponsiveTable" element={<ResponsiveTable/>}></Route> */}
-          {/* <Route path="/PaymBranchtable" element={<PaymBranchtable />}></Route> */}
           <Route path="/SlabTemplateEmp" element={<SlabTemplateEmp/>}/>
-          {/* <Route path="/RTN" element={<OverTimeGrid/>}/> */}
           <Route
             path="/PaymEmployeeForm"
             element={<PaymEmployeeForm />}/>
@@ -313,10 +333,50 @@ root.render(
              <Route path="/EmployeeReimbursement" element={<EmployeeReimbursement/>}></Route>
              <Route path="/EarnDeductMasters" element={<EarnDeductMastersss/>}/>
              <Route path="/Employeeprofile0909" element={<Employeeprofile0909/>}/>
-
              <Route path="/EarnDeductValueMaters" element={<EarnDeductValueMasters/>}/> 
              <Route path="/Editprofile/:employeeId" element={<Editprofile/>} />   
              <Route path="/EditEmployee/:employeeId"  element={<EditEmployee/>}/>
+             <Route path="/DesignationMaster" element={<DesignationMaster/>}/>
+             <Route path="/DepartmentMaster" element={<DepartmentMaster/>}/>
+             <Route path="/DepartmentHome" element={<DepartmentHome/>}/>
+             <Route path="/DesignationHome" element={<DesignationHome/>}/>
+             <Route path="/SlideAnimationComponent" element={<SlideAnimationComponent/>}></Route>
+
+
+
+{/*login company---------------------------------------------------------------------------------------------------*/}
+
+             <Route path="/HomePage1" element={<HomePage1/>}/>
+             <Route path="/CompanyMasterss1" element={<CompanyMasterss1/>}/>
+             <Route path="/BranchMaster1" element={<BranchMaster1/>}/>
+             <Route path="/CategoryFormMaster1" element={<CategoryFormMaster1/>}/>
+             <Route path="/DivisionMaster1" element={<DivisionMaster1/>}/>
+             <Route path="/DepartmentFormMaster1" element={<DepartmentFormMaster1/>}/>
+             <Route path="/DesignationMasterForm1" element={<DesignationMasterForm1/>}/>
+             <Route path="/GradeForm1" element={<GradeForm1/>}/>
+             <Route path="/ShiftFormMaster1" element={<ShiftFormMaster1/>}/>
+             <Route path="/JobStatusFormMaster1" element={<JobStatusFormMaster1/>}/>
+             <Route path="/LevelFormMaster1" element={<LevelFormMaster1/>}/>
+             <Route path="/PaymLeaveMaster1" element={<PaymLeaveMaster1/>}/>
+
+
+          {/*login employee---------------------------------------------------------------------------------------------------*/}
+
+
+<Route path="/HomePage2"  element={<HomePage2/>}/>
+<Route path="HolidaysPage2" element={<HolidaysPage2/>}/>
+<Route path="/LeaveapplyHr2" element={<LeaveapplyHr2/>}/>
+<Route path="/LeaveRequestTable2" element={<LeaveRequestTable2/>}/>
+<Route path="/LeaveBalances2" element={<LeaveBalances2/>}/>
+<Route path="/LeaveCalendar2" element={<LeaveCalendar2/>}/>
+<Route path="/ReimbursementForm2" element={<ReimbursementForm2/>}/>
+<Route path="/EmployeeDashBoard2" element={<EmployeeDashBoard2/>}/>
+<Route path="/BasicDateCalendar2" element={<BasicDateCalendar2/>}/>
+
+
+
+
+
                            {/* <Route path="/layout" elem ent={<Layoutcomp />} />
           <Route path="/att" element={<BasicDateCalendar />} />
           <Route path="/home" element={<ServiceCard />}></Route>
