@@ -26,7 +26,7 @@ import { getRequest } from '../../serverconfiguration/requestcomp';
 import { ServerConfig } from '../../serverconfiguration/serverconfig'; 
 import { TIMECARD } from '../../serverconfiguration/controllers';
 
-export default function BasicTable() {
+export default function BasicTable2() {
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

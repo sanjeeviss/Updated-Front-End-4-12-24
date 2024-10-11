@@ -12,6 +12,7 @@ import {
   Box,
   Container,
   CardContent,
+  InputLabel,
 } from '@mui/material';
 import { postRequest } from '../../serverconfiguration/requestcomp';
 import { ServerConfig } from '../../serverconfiguration/serverconfig';
@@ -185,22 +186,25 @@ export default function DepartmentFormMaster1() {
                                 </FormControl>
                               </Grid>
                               <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth error={touched.status && Boolean(errors.status)}>
-                                  <TextField
-                                    name="status"
-                                    label={<span>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></span>}
-                                    variant="outlined"
-                                    fullWidth
-                                    value={values.status}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    InputLabelProps={{ shrink: true }}
-                                  />
-                                  {touched.status && errors.status && (
-                                    <FormHelperText sx={{ color: 'error.main' }}>{errors.status}</FormHelperText>
-                                  )}
-                                </FormControl>
-                              </Grid>
+  <FormControl fullWidth error={touched.status && Boolean(errors.status)}>
+    <InputLabel shrink>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></InputLabel>
+    <Select
+      name="status"
+      label="Status"
+      value={values.status}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      variant="outlined"
+      fullWidth
+    >
+      <MenuItem value="A">Active</MenuItem>
+      <MenuItem value="I">Inactive</MenuItem>
+    </Select>
+    {touched.status && errors.status && (
+      <FormHelperText sx={{ color: 'error.main' }}>{errors.status}</FormHelperText>
+    )}
+  </FormControl>
+</Grid>
                               <Grid container spacing={1} paddingTop="20px">
                   <Grid item xs={12} align="right">
                     <Button

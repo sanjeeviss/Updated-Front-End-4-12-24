@@ -21,12 +21,14 @@ import InfoIcon from '@mui/icons-material/Info';
 import HomeIcon from '@mui/icons-material/Home';
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
+import  { useState, useEffect } from 'react';
+
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "./appStore";
 import { useLocation } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-
+import StarHalfIcon from '@mui/icons-material/StarHalf';
 const drawerWidth = 200;
 
 const openedMixin = (theme) => ({
@@ -92,6 +94,8 @@ export default function Sidenav() {
   const [openSalary, setOpenSalary] = React.useState(false);
   const isLoggedIn = sessionStorage.getItem("user") !== null;
   const [openAttendance, setOpenAttendance] = React.useState(false);
+  const [isloggedin, setisloggedin] = useState(sessionStorage.getItem("user"))
+
 
   const handleAttendanceClick = () => {
     setOpenAttendance(!openAttendance);
@@ -129,7 +133,15 @@ export default function Sidenav() {
         </DrawerHeader>
         <Divider />
         <List>
-        
+        <ListItem disablePadding sx={{ display: "block" }}>
+            <Box sx={{ display: "flex", alignItems: "center", marginLeft: 2 }}>
+              <Avatar>{sessionStorage.getItem("user").charAt(0)}</Avatar>
+              <Typography color={"white"} sx={{ margin: 2 }}>
+                {sessionStorage.getItem("user")}
+              </Typography>
+            </Box>
+          </ListItem>
+
 {/* 
           <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/Attendancewise1")}>
             <ListItemButton
@@ -165,7 +177,7 @@ export default function Sidenav() {
             </ListItemButton>
           </ListItem> */}
 
-          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/HomePage")}>
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/HomePage1")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -189,6 +201,34 @@ export default function Sidenav() {
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+            </ListItemButton>
+          </ListItem>
+
+
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/GradeSlab")}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                transition: "transform 0.4s ease-in-out",
+                "&:hover": {
+                  backgroundColor: "#7f7f7f",
+                  transform: "scale(1.10)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "white",
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <StarHalfIcon />
+              </ListItemIcon>
+              <ListItemText primary="Grade Slab" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
           </ListItem>
   {/* <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/MastersTemplate")}>

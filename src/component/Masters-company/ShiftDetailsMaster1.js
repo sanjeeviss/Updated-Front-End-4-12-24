@@ -10,6 +10,7 @@ import {
   FormHelperText,
   Grid,Box,Container,
   Stack,
+  InputLabel,
 } from '@mui/material';
 import { postRequest } from '../../serverconfiguration/requestcomp';
 import { ServerConfig } from '../../serverconfiguration/serverconfig';
@@ -272,16 +273,21 @@ export default function ShiftFormMaster1() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth error={touched.status && Boolean(errors.status)}>
-                      <TextField
+                    <InputLabel shrink>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></InputLabel>
+
+                      <Select
                         name="status"
-                        label={<span>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></span>}
+                       label="Status"
                         variant="outlined"
                         fullWidth
                         value={values.status}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         InputLabelProps={{ shrink: true }}
-                      />
+                      >
+                          <MenuItem value="A">Active</MenuItem>
+                           <MenuItem value="I">Inactive</MenuItem>
+                           </Select>
                       {touched.status && errors.status && (
                         <FormHelperText sx={{ color: 'error.main' }}>{errors.status}</FormHelperText>
                       )}

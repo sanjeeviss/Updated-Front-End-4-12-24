@@ -173,17 +173,11 @@ import AddInfos from "./components/Group UI/AddInfos";
 import PaympaybillTable from "./components/PaymPaybill/paympaybillTables";
 import PaymPaypfTable from "./components/PaymPf/paympfTable";
 import GroupShift from "./components/Group UI/GroupShift";
-import PayslipNewFormat from "./components/PayslipNew format/PayslipNewFormat";
-import PayslipGenerator from "./components/PayslipNew format/payslipgenerator";
-import OldPayslipGenerator from "./components/PayslipNew format/OldPayslipGenerator";
-import OldPayslip from "./components/PayslipNew format/Oldpayslip";
 import Medical from "./components/Medical/Medical";
 import MedicalSlipGenerator from "./components/Medical/MedicalSlipGenerator";
 import MedicalSlipView from "./components/Medical/MedicalSlipView";
 import ViewMedical from "./components/Medical/ViewMedical";
 import EarlyAndLate from "./components/Early and Late entries/Earlyandlateentriesform";
-import Payslipelegant from "./components/PayslipNew format/Payslipelegant";
-import Payslipmonthly from "./components/PayslipNew format/Payslipmonthly";
 import Mastterrol from "./components/masterrols/Masterrols";
 import Setup from "./components/masterrols/setup";
 import Setup2 from "./components/masterrols/Setup2";
@@ -273,10 +267,27 @@ import LeaveCalendar2 from "./Component1/Masters/LeaveCalender2";
 import ReimbursementForm2 from "./Component1/Masters/Reimbursement2";
 import EmployeeDashBoard2 from "./Component1/Nattendance Epm/EmployeeDashBoard2";
 import BasicDateCalendar2 from "./Component1/Nattendance Epm/Nattendance2";
+import OldPayslip from "./Component1/Masters/PayslipNew format/Oldpayslip";
+import OldPayslipGenerator from "./Component1/Masters/PayslipNew format/OldPayslipGenerator";
+import Payslipelegant from "./Component1/Masters/PayslipNew format/Payslipelegant";
+import PayslipGenerator from "./Component1/Masters/PayslipNew format/payslipgenerator";
+import Payslipmonthly from "./Component1/Masters/PayslipNew format/Payslipmonthly";
+import PayslipNewFormat from "./Component1/Masters/PayslipNew format/PayslipNewFormat";
+import PaySlipTemplate from "./Component1/Masters/PayslipNew format/paysliptemplate";
+import PaySlipFormTemplate from "./Component1/Masters/PayslipNew format/paysliptemplateform";
+import PrintPayslip from "./Component1/Masters/PayslipNew format/PrintPayslip";
+import HolidaysempPage2 from "./Component1/Masters/Holidayemp/Holidayemp2";
+import { LightThemeConfig } from "./component/Home Page-comapny/Theme";
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import Grade_Slab from "./component/Masters-company/SlabGrade";
+import EarnDeductCompanyMasters from "./component/Masters-company/EarnDeductMaster";
 
 const store = createStore(entityReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  <ThemeProvider theme={LightThemeConfig}>
+       <CssBaseline />
   <Provider store={store}>
     <BrowserRouter>
       {/* <br></br>
@@ -313,9 +324,9 @@ root.render(
             path="/PaymEmployeeForm"
             element={<PaymEmployeeForm />}/>
              <Route path="/PaymEmpTable" element={<PaymEmpTable />}></Route>
-             <Route path="/payslipgenerator" element={<PayslipGenerator />}></Route>
-             <Route path="/payslipgenerator/payslipmonthly" element={<Payslipmonthly />}></Route>
-             <Route path="/payslipelegant" element={<Payslipelegant />}></Route>
+             {/* <Route path="/payslipgenerator" element={<PayslipGenerator />}></Route> */}
+             {/* <Route path="/payslipgenerator/payslipmonthly" element={<Payslipmonthly />}></Route> */}
+             {/* <Route path="/payslipelegant" element={<Payslipelegant />}></Route> */}
              <Route path="/classic" element={<PayslipNewFormat/>}></Route>
              <Route path="/PtGrid" element={<PtGrid/>}></Route>
              <Route path="/OverTime" element={<OverTime/>}></Route>
@@ -359,12 +370,15 @@ root.render(
              <Route path="/LevelFormMaster1" element={<LevelFormMaster1/>}/>
              <Route path="/PaymLeaveMaster1" element={<PaymLeaveMaster1/>}/>
 
+             <Route path="/GradeSlab" element={<Grade_Slab/>}/>
+             <Route path="/EarnDeductCompanyMasters" element={<EarnDeductCompanyMasters/>}/>
+
 
           {/*login employee---------------------------------------------------------------------------------------------------*/}
 
 
 <Route path="/HomePage2"  element={<HomePage2/>}/>
-<Route path="HolidaysPage2" element={<HolidaysPage2/>}/>
+<Route path="HolidaysempPage2" element={<HolidaysempPage2/>}/>
 <Route path="/LeaveapplyHr2" element={<LeaveapplyHr2/>}/>
 <Route path="/LeaveRequestTable2" element={<LeaveRequestTable2/>}/>
 <Route path="/LeaveBalances2" element={<LeaveBalances2/>}/>
@@ -372,6 +386,21 @@ root.render(
 <Route path="/ReimbursementForm2" element={<ReimbursementForm2/>}/>
 <Route path="/EmployeeDashBoard2" element={<EmployeeDashBoard2/>}/>
 <Route path="/BasicDateCalendar2" element={<BasicDateCalendar2/>}/>
+
+
+
+<Route path="/OldPayslip" element={<OldPayslip/>}/>
+<Route path="/OldPayslipGenerator" element={<OldPayslipGenerator/>}/>
+<Route path="/payslipelegant" element={<Payslipelegant/>}/>
+<Route path="/payslipgenerator" element={<PayslipGenerator/>}/>
+<Route path="/payslipgenerator/Payslipmonthly" element={<Payslipmonthly/>}/>
+<Route path="/classic" element={<PayslipNewFormat/>}/>
+<Route path="/PaySlipTemplate" element={<PaySlipTemplate/>}/>
+<Route path="/PaySlipFormTemplate" element={<PaySlipFormTemplate/>}/>
+<Route path="/PrintPayslip" element={<PrintPayslip/>}/>
+
+
+
 
 
 
@@ -764,6 +793,7 @@ root.render(
       </Routes>
     </BrowserRouter>
   </Provider>
+  </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

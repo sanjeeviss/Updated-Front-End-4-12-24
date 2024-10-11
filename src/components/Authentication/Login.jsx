@@ -193,6 +193,7 @@ function LoginOthers(props) {
                 value={username}
                 onChange={handleUsernameChange}
                 sx={{ backgroundColor: "#f9f9f9" }}
+                InputLabelProps={{shrink : true}}
               />
             </Grid>
             <Grid item xs={12}>
@@ -204,6 +205,7 @@ function LoginOthers(props) {
                 value={password}
                 onChange={handlePasswordChange}
                 sx={{ backgroundColor: "#f9f9f9" }}
+                InputLabelProps={{shrink : true}}
               />
             </Grid>
             <Grid item xs={12}>

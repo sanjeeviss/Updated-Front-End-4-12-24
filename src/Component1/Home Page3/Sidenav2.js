@@ -30,6 +30,7 @@ import TodayIcon from "@mui/icons-material/Today";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ReceiptIcon from "@mui/icons-material/Receipt";
 
 const drawerWidth = 210;
 
@@ -440,7 +441,7 @@ export default function Sidenav() {
                   </ListItemButton>
                 </ListItem>
 
-                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/HolidaysPage2")}>
+                <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/HolidaysempPage2")}>
                   <ListItemButton
                     sx={{
                       minHeight: 48,
@@ -485,6 +486,33 @@ export default function Sidenav() {
                 <CurrencyExchangeIcon/>
               </ListItemIcon>
               <ListItemText primary="Reimbursement" sx={{ opacity: open ? 1 : 0, color: "white" }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/payslipgenerator")}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                transition: "transform 0.4s ease-in-out",
+                "&:hover": {
+                  backgroundColor: "#7f7f7f",
+                  transform: "scale(1.10)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "white",
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <ReceiptIcon/>
+              </ListItemIcon>
+              <ListItemText primary="Payslip" sx={{ opacity: open ? 1 : 0, color: "white" }} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/Masters")}>

@@ -253,11 +253,15 @@ const CompanyMasterss1 = () => {
   };
 
   const handleDialogYes = () => {
-    navigate("/PayBranchForm01");
+    sessionStorage.clear();
+    // Navigate to login page or any other page you desire
+    window.location.href = "http://localhost:3000/";
   };
 
   const handleDialogNo = () => {
-    navigate("/DivisionForm");
+    sessionStorage.clear();
+    // Navigate to login page or any other page you desire
+    window.location.href = "http://localhost:3000/";
   };
 
   return (

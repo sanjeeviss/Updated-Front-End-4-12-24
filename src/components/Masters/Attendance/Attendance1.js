@@ -200,10 +200,10 @@ export default function Attendance01() {
               <TableCell align="center">Break In</TableCell>
               <TableCell align="center">Out Time</TableCell>
               <TableCell align="center">OT Hrs</TableCell>
-              <TableCell align="left">Type</TableCell>
-              <TableCell align="left">Designation</TableCell>
-              <TableCell align="left">VerifyMode</TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="left">Type</TableCell> */}
+              {/* <TableCell align="left">Designation</TableCell>
+              <TableCell align="left">VerifyMode</TableCell> */}
+              <TableCell align="left">
                 <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
                   <InputLabel>Status</InputLabel>
                   <Select
@@ -248,9 +248,9 @@ export default function Attendance01() {
                   <TableCell align="center">{row.BreakIn}</TableCell>
                   <TableCell align="center">{row.OutTime}</TableCell>
                   <TableCell align="center">{row.OTHrs}</TableCell>
-                  <TableCell align="left">{row.Type}</TableCell>
-                  <TableCell align="left">{row.Designation}</TableCell>
-                  <TableCell align="left">{row.VerifyMode}</TableCell>
+                  {/* <TableCell align="left">{row.Type}</TableCell> */}
+                  {/* <TableCell align="left">{row.Designation}</TableCell>
+                  <TableCell align="left">{row.VerifyMode}</TableCell> */}
                   <TableCell align="center">{row.Status}</TableCell>
                 </TableRow>
               ))

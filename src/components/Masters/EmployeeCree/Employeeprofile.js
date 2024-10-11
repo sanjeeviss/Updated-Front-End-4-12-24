@@ -11,6 +11,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Divider,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { PAYMCOMPANIES, PAYMBRANCHES, REPORTS } from "../../../serverconfiguration/controllers";
@@ -18,9 +19,10 @@ import { getRequest, postRequest } from "../../../serverconfiguration/requestcom
 import { ServerConfig } from "../../../serverconfiguration/serverconfig";
 import { useNavigate } from "react-router-dom";
 import { SAVE } from "../../../serverconfiguration/controllers";
-import Employeeprofile0909090 from "./EmployeePrfile1Org"
+//   import Employeeprofile0909090 from "./EmployeePrfile1Org"
 import Sidenav from "../../Home Page/Sidenav";
 import Navbar from "../../Home Page/Navbar";
+
 export default function PaymEmployeeFormm() {
   const navigate = useNavigate();
   const [company, setCompany] = useState([]);
@@ -32,6 +34,13 @@ export default function PaymEmployeeFormm() {
   const [isloggedin, setloggedin] = useState(sessionStorage.getItem("user"))
   const [loggedBranch, setloggedBranch] = useState([])
   const [loggedCompany, setloggedCompany] = useState([])
+  const [Gradebybranch , setGradebybranch] = useState([])
+  const [Gradebydivision, setGradebydivision] = useState([])
+  const [gradeData, setGradeData] = useState([]);
+const [labelHeader, setLabelHeader] = useState("Grade"); 
+const [GradebyDivision, setGradebyDivision] = useState([]);
+const [result, setResult] = useState({});
+
 
   const [formData, setFormData] = useState({
     pn_CompanyID: "",
@@ -76,8 +85,9 @@ export default function PaymEmployeeFormm() {
     Aadharcard:"",
     FatherName:"",
     Email:"",
-    AlternateEmail:""
-
+    AlternateEmail:"",
+    Grade: "",
+    Overall_Experience: ""
   });
 
 
@@ -151,10 +161,113 @@ export default function PaymEmployeeFormm() {
       fetchLoggedCompany();
     }
   }, [loggedBranch]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const uniqueGrades = Array.from(
+    new Set(
+      gradeData.map((grade) => (grade.Slab_Type === "Level" ? grade.Level_Name : grade.Grade_Name))
+    )
+  );
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        if (loggedBranch.length > 0) {
+          // Fetch Grade by Branch
+          const GradebyBranch = await postRequest(ServerConfig.url, REPORTS, {
+            query: `select * from GradeSlab_Branch where pn_branchid = ${loggedBranch[0].pn_BranchID}`,
+          });
+  
+          // Fetch Grade by Division
+          const GradebyDivisionResponse = await postRequest(ServerConfig.url, REPORTS, {
+            query: `select * from GradeSlab_Division where pn_branchid = ${loggedBranch[0].pn_BranchID}`,
+          });
+  
+          // Set the Grade by Division data
+          setGradebyDivision(GradebyDivisionResponse.data);
+  
+          let slabType;
+          if (GradebyBranch.data.length > 0) {
+            setGradeData(GradebyBranch.data);
+            slabType = GradebyBranch.data[0].Slab_Type;
+          } else if (GradebyDivisionResponse.data.length > 0) {
+            setGradeData(GradebyDivisionResponse.data);
+            slabType = GradebyDivisionResponse.data[0].Slab_Type;
+          }
+  
+          // Set the label based on Slab_Type
+          if (slabType === "Grade") {
+            setLabelHeader("Grade");
+          } else if (slabType === "Level") {
+            setLabelHeader("Level");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching grade data:", error);
+      }
+    }
+  
+    if (loggedBranch.length > 0) {
+      getData();
+    }
+  }, [loggedBranch]);
+
+  useEffect(() => {
+    const executeStoredProcedure = async () => {
+      if (formData.Grade && formData.Overall_Experience) {
+        try {
+          let result;
+          if (gradeData.length > 0) {
+            const slabType = gradeData[0].Slab_Type;
+            if (GradebyDivision.length > 0) {
+              if (slabType === "Grade") {
+                result = await postRequest(ServerConfig.url, REPORTS, {
+                  query: `EXEC GetCTCBySlabDivision @SlabType = 'Grade', @Grade_Name = '${formData.Grade}', @Experience = ${formData.Overall_Experience}`,
+                });
+              } else if (slabType === "Level") {
+                result = await postRequest(ServerConfig.url, REPORTS, {
+                  query: `EXEC GetCTCBySlabDivision @SlabType = 'Level', @Level_Name = '${formData.Grade}', @Experience = ${formData.Overall_Experience}`,
+                });
+              }
+            } else {
+              if (slabType === "Grade") {
+                result = await postRequest(ServerConfig.url, REPORTS, {
+                  query: `EXEC GetCTCBySlab @SlabType = 'Grade', @Grade_Name = '${formData.Grade}', @Experience = ${formData.Overall_Experience}`,
+                });
+              } else if (slabType === "Level") {
+                result = await postRequest(ServerConfig.url, REPORTS, {
+                  query: `EXEC GetCTCBySlab @SlabType = 'Level', @Level_Name = '${formData.Grade}', @Experience = ${formData.Overall_Experience}`,
+                });
+              }
+            }
+          }
+
+          console.log("Stored Procedure Result:", result);
+console.log("Type of Result:", typeof result);
+console.log("Is Result an Array?:", Array.isArray(result));
+// Log the result
+          setResult(result); // Set the result in state
+          console.log("Updated State Result:", { ...result });
+        } catch (error) {
+          console.error("Error executing stored procedure:", error);
+        }
+      }
+    };
+
+    if (formData.Grade && formData.Overall_Experience) {
+      executeStoredProcedure();
+    }
+  }, [formData.Grade, formData.Overall_Experience, gradeData, GradebyDivision]);
+
+  
+
+
+  
+
 
   const validateForm = () => {
     const newErrors = {};
@@ -218,8 +331,7 @@ export default function PaymEmployeeFormm() {
       if (!formData.pfno) newErrors.pfno = "This field is required  at 20 characters";
       if (!formData.esino) newErrors.esino = "This field is required at 20 characters";
       if (!formData.otCalc) newErrors.otCalc = "This field is required only float value";
-      if (!formData.ctc) newErrors.ctc = "This field is required only float value";
-      if (!formData.basicSalary) newErrors.basicSalary = "This field is required only float value";
+           if (!formData.basicSalary) newErrors.basicSalary = "This field is required only float value";
     } else if (tabValue === 1) {
       // Validate fields for Bank Details
       if (!formData.bankCode) newErrors.bankCode = "This field is required at 10 character";
@@ -254,6 +366,11 @@ export default function PaymEmployeeFormm() {
 
   const handlesave = async () => {
     try {
+      // Ensure formData.ctc is updated correctly with the CTC value from the TextField
+      if (formData.Grade && formData.Overall_Experience && result?.data?.length > 0) {
+        formData.ctc = result.data[0]?.CTC || '';
+      }
+
       // Capture form data values
       console.log("Form Data:", formData);
   
@@ -263,7 +380,7 @@ export default function PaymEmployeeFormm() {
          [pn_CompanyID], [pn_BranchID], [EmployeeCode], [Employee_First_Name],
           [Employee_Middle_Name], [Employee_Last_Name], [DateofBirth], [Password],
           [Gender], [status], [Employee_Full_Name], [Readerid], [OT_Eligible],
-          [Pfno], [Esino], [OT_calc], [CTC], [basic_salary], [Bank_code], [Bank_Name],
+          [Pfno], [Esino], [OT_calc], [Grade], [Overall_Experience], [CTC], [basic_salary], [Bank_code], [Bank_Name],
           [Branch_Name], [Account_Type], [MICR_code], [IFSC_Code], [Other_Info],
           [Reporting_person], [ReportingID], [Reporting_email], [Pan_no], [salary_type],
           [TDS_Applicable], [Flag], [role], [Blood_Group], [Phone_No], [Alternate_Phone_No],
@@ -274,15 +391,14 @@ export default function PaymEmployeeFormm() {
           '${formData.employeeFirstName}', '${formData.employeeMiddleName}', '${formData.employeeLastName}',
           '${formData.dateofBirth}', '${formData.password}', '${formData.gender}', '${formData.status}',
           '${formData.employeeFullName}', ${formData.readerid}, '${formData.otEligible}', '${formData.pfno}',
-          '${formData.esino}', ${formData.otCalc}, ${formData.ctc}, ${formData.basicSalary},
+          '${formData.esino}', ${formData.otCalc}, '${formData.Grade}', ${formData.Overall_Experience}, ${formData.ctc}, ${formData.basicSalary},
           '${formData.bankCode}', '${formData.bankName}', '${formData.branchName}', '${formData.accountType}',
           '${formData.micrCode}', '${formData.ifscCode}', '${formData.otherInfo}', '${formData.reportingPerson}',
           ${formData.reportingId}, '${formData.reportingEmail}', '${formData.panNo}', '${formData.salaryType}',
           '${formData.tdsApplicable}', '${formData.flag}', ${formData.role}, '${formData.BloodGroup}',
           '${formData.PhoneNo}', '${formData.AlternatePhoneNo}', '${formData.permanantaddress}',
           '${formData.Aadharcard}', '${formData.CurrentAddress}', '${formData.accountNo}','${formData.FatherName}',
-          '${formData.Email}','${formData.AlternateEmail}'
-
+          '${formData.Email}','${formData.AlternateEmail}' 
         )
       `;
   
@@ -302,7 +418,19 @@ export default function PaymEmployeeFormm() {
       alert("An error occurred: " + error.message);
     }
   };
+
   
+const getUniqueGrades = (grades) => {
+  const uniqueSet = new Set(); // This will store unique values
+  return grades.filter((grade) => {
+    const key = grade.Slab_Type === "Level" ? grade.Level_Name : grade.Grade_Name;
+    if (uniqueSet.has(key)) {
+      return false; // Skip duplicates
+    }
+    uniqueSet.add(key); // Add unique values to the set
+    return true;
+  });
+};
 
 
   const handleNext = () => {
@@ -356,15 +484,21 @@ export default function PaymEmployeeFormm() {
                 </Tabs>
               )}
 
-              {profileTabValue === 1 && (
-                <Employeeprofile0909090 />
-              )}
+             
               <form >
+
+
                 <Grid container spacing={2} style={{ marginTop: "20px" }}>
+
                   {tabValue === 0 && (
                     <>
+
+<Typography variant="h6"fontWeight={'500'} fontSize={'18px'} sx={{paddingLeft:'20px'}} gutterBottom>
+  Company Information
+</Typography>
+<Divider style={{ width: '100%' }} />
                       {/* General Information Fields */}
-                      <Grid item xs={12} sm={4}>
+                      <Grid item xs={12} sm={6}>
                       <TextField
                    label={
                     <span>
@@ -405,7 +539,13 @@ export default function PaymEmployeeFormm() {
                         />
                       </Grid>
 
-                      <Grid item xs={12} sm={4}>
+  <Typography variant="h6"fontWeight={'500'} fontSize={'18px'}  sx={{paddingLeft:'20px' ,paddingTop:'20px'}} gutterBottom>
+  Employee Basic  Information
+</Typography>
+<Divider style={{ width: '100%' }} />
+
+<Grid xs={12} sm={12} display={'flex'} spacing={2} >
+                      <Grid item xs={12} sm={4} sx={{paddingLeft:'16px',marginRight:'20px'}}>
                         <TextField
                           label={
                             <span>
@@ -424,6 +564,30 @@ export default function PaymEmployeeFormm() {
                           value={formData.employeeCode}
                           onChange={handleInputChange}
                         />
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                      <FormControl fullWidth error={!!errors.status}>
+                      <InputLabel shrink>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></InputLabel>
+
+                        <Select
+                        
+                          name="status"
+                      label="Status"
+                          variant="outlined"
+                          fullWidth
+                          InputLabelProps={{ shrink: true }}
+                          //required
+                          error={!!errors.status}
+                          helperText={errors.status}
+                          value={formData.status}
+                          onChange={handleInputChange}
+                        >
+                            <MenuItem value="A">Active</MenuItem>
+                           <MenuItem value="I">Inactive</MenuItem>
+                           </Select>
+                           </FormControl>
+                      </Grid>
+                   
                       </Grid>
                       <Grid item xs={12} sm={4}>
                         <TextField
@@ -476,6 +640,29 @@ export default function PaymEmployeeFormm() {
                           onChange={handleInputChange}
                         />
                       </Grid>
+                    <Grid xs={12} sm={12}>
+                    <Grid item xs={12} sm={4}  sx={{paddingLeft:'16px',paddingTop:"20px"}}>
+                        <TextField
+                         label={
+                          <span>
+                           Father Name
+                            <span style={{ color: 'red'}}>*</span>
+                          </span>
+                         }
+                          name="FatherName"
+                          // label="Full Name"
+                          variant="outlined"
+                          fullWidth
+                          InputLabelProps={{ shrink: true }}
+                          //required
+                          error={!!errors.FatherName  }
+                          helperText={errors.FatherName}
+                          value={formData.FatherName}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                    </Grid>
+
                     
                       <Grid item xs={12} sm={4}>
                         <TextField
@@ -499,35 +686,12 @@ export default function PaymEmployeeFormm() {
                         />
                       </Grid>
                       <Grid item xs={12} sm={4}>
-                        <TextField
-                          label={
-                            <span>
-                              Password
-                              <span style={{ color: 'red'}}>*</span>
-                            </span>
-                           }
-                          name="password"
-                          // label="Password"
-                          variant="outlined"
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                          //required
-                          error={!!errors.password}
-                          helperText={errors.password}
-                          value={formData.password}
-                          onChange={handleInputChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
                         <FormControl fullWidth error={!!errors.gender}>
-                          <InputLabel  >
-                        <span>Gender
-        <span style={{ color: 'red', marginLeft: 4 }}>*</span>
-      </span>
-      </InputLabel>
+                        <InputLabel shrink>Gender<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></InputLabel>
                           
                           <Select
                             name="gender"
+                             label="Gender"
                             value={formData.gender}
                             onChange={handleInputChange}
                             displayEmpty
@@ -541,66 +705,6 @@ export default function PaymEmployeeFormm() {
                             <Typography color="error">{errors.gender}</Typography>
                           )}
                         </FormControl>
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <TextField
-                         label={
-                          <span>
-                           Status
-                            <span style={{ color: 'red'}}>*</span>
-                          </span>
-                         }
-                          name="status"
-                          // label="Status"
-                          variant="outlined"
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                          //required
-                          error={!!errors.status}
-                          helperText={errors.status}
-                          value={formData.status}
-                          onChange={handleInputChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <TextField
-                         label={
-                          <span>
-                           Employee Full Name
-                            <span style={{ color: 'red'}}>*</span>
-                          </span>
-                         }
-                          name="employeeFullName"
-                          // label="Full Name"
-                          variant="outlined"
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                          //required
-                          error={!!errors.employeeFullName}
-                          helperText={errors.employeeFullName}
-                          value={formData.employeeFullName}
-                          onChange={handleInputChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <TextField
-                         label={
-                          <span>
-                           Father Name
-                            <span style={{ color: 'red'}}>*</span>
-                          </span>
-                         }
-                          name="FatherName"
-                          // label="Full Name"
-                          variant="outlined"
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                          //required
-                          error={!!errors.FatherName  }
-                          helperText={errors.FatherName}
-                          value={formData.FatherName}
-                          onChange={handleInputChange}
-                        />
                       </Grid>
                       <Grid item xs={12} sm={4}>
                         <TextField
@@ -622,6 +726,40 @@ export default function PaymEmployeeFormm() {
                           onChange={handleInputChange}
                         />
                       </Grid>
+                    
+                  
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                          label={
+                            <span>
+                              Password
+                              <span style={{ color: 'red'}}>*</span>
+                            </span>
+                           }
+                          name="password"
+                          // label="Password"
+                          variant="outlined"
+                          fullWidth
+                          InputLabelProps={{ shrink: true }}
+                          //required
+                          error={!!errors.password}
+                          helperText={errors.password}
+                          value={formData.password}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      {/* <Typography variant="h6"fontWeight={'500'} fontSize={'18px'}  sx={{paddingLeft:'20px' ,paddingTop:'20px'}} gutterBottom>
+  Employee Basic  Information
+</Typography>
+<Divider style={{ width: '100%' }} />
+
+<Grid xs={12} sm={12}> */}
+
+                      
+                    
+                    
+                      
+                   
                     
                       <Grid item xs={12} sm={4}>
                         <TextField
@@ -696,7 +834,7 @@ export default function PaymEmployeeFormm() {
                         />
                       </Grid>
 
-                      <Grid item xs={12} sm={4}>
+                      <Grid item xs={12} sm={12}>
                         <TextField
                          label={
                           <span>
@@ -858,26 +996,70 @@ export default function PaymEmployeeFormm() {
                         />
                       </Grid>
                       <Grid item xs={12} sm={4}>
+    <FormControl variant="outlined" fullWidth>
+      <InputLabel id="grade-select-label">{labelHeader}</InputLabel>
+      <Select
+        labelId="grade-select-label"
+        name="Grade" // Keep this static or change based on your requirements
+        value={formData.Grade}
+        onChange={handleInputChange}
+        label={labelHeader}
+      >
+        {getUniqueGrades(gradeData).map((grade) => (
+          // Check the Slab_Type to decide which name to show
+          <MenuItem key={grade.id} value={grade.Slab_Type === "Level" ? grade.Level_Name : grade.Grade_Name}>
+            {grade.Slab_Type === "Level" ? grade.Level_Name : grade.Grade_Name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  </Grid>
+                 <Grid item xs={12} sm={4}>
                         <TextField
                          label={
-                          <span>
-                           CTC
-                            <span style={{ color: 'red'}}>*</span>
-                          </span>
+                          
+                           'Overall_Experience'
+                            
                          }
-                          name="ctc"
-                          // label="ctc"
+                          name="Overall_Experience"
+                          // label="otCalc"
                           variant="outlined"
                           fullWidth
                           InputLabelProps={{ shrink: true }}
                           //required
-                          error={!!errors.ctc}
-                          helperText={errors.ctc}
-                          value={formData.ctc}
+                        
+                          value={formData.Overall_Experience}
                           onChange={handleInputChange}
                         />
                       </Grid>
+                      
                       <Grid item xs={12} sm={4}>
+                      <TextField
+  label="CTC"
+  variant="outlined"
+  fullWidth
+  value={
+    formData.Grade && formData.Overall_Experience && result?.data?.length > 0 
+      ? result.data[0]?.CTC || (result.data[0]?.Message === 'No matching records found.' ? 'Choose Correct Grade' : '')
+      : ''
+  }
+  InputProps={{
+    readOnly: true,
+    style: {
+      color: result?.data?.[0]?.Message === 'No matching records found.' ? 'red' : 'inherit',
+      fontSize: result?.data?.[0]?.Message === 'No matching records found.' ? '0.95rem' : 'inherit',
+    },
+  }}
+  onChange={(e) => setFormData({ ...formData, ctc: e.target.value })}  // Update the formData.ctc here
+/>
+
+</Grid>
+
+
+
+
+    
+                <Grid item xs={12} sm={4}>
                         <TextField
                          label={
                           <span>
@@ -1263,3 +1445,5 @@ export default function PaymEmployeeFormm() {
 
   );
 }
+
+

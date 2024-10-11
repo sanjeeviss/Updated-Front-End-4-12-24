@@ -331,9 +331,10 @@ VALUES
                       <Grid container spacing={2} sx={{ paddingTop: 2 }}>
                  <Grid item xs={4}>
                   <FormControl fullWidth error={formik.touched.pnCompanyId && Boolean(formik.errors.pnCompanyId)}>
-                    <InputLabel shrink>Company Name</InputLabel>
+                    <InputLabel shrink>Company</InputLabel>
                     <Select
                       name="pnCompanyId"
+                      label="Company"
                       value={formik.values.pnCompanyId}
                       onChange={formik.handleChange}
                       displayEmpty
@@ -387,6 +388,7 @@ VALUES
                               </span>
                             }
                             name="branchName"
+                          
                             value={formik.values.branchName}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}

@@ -188,13 +188,13 @@ function DesignationHome() {
   };
 
   const handleEditClick = (id) => {
-    navigate(`/edit/${id}`);
+    navigate(`/DesignationMaster`);
     setSnackbarMessage("Redirecting to edit designation");
     setSnackbarOpen(true);
   };
 
   const handleViewClick = (id) => {
-    navigate(`/view/${id}`);
+    navigate(`/DesignationMaster`);
   };
 
   const handleDeleteClick = async (id) => {

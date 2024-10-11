@@ -9,7 +9,8 @@ import {
     FormControl,
     MenuItem,
     Select,
-    FormHelperText
+    FormHelperText,
+    InputLabel
   } from "@mui/material";
   import { useState, useEffect } from "react";
   import { useNavigate } from "react-router-dom";
@@ -78,7 +79,7 @@ import {
           if (response.status === 200) {
             alert('Data saved successfully');
             resetForm(); // Reset the form after successful submission
-            navigate('/'); // Adjust navigation if needed
+            navigate('/EarnDeductCompanyMasters'); // Adjust navigation if needed
           } else {
             alert('Failed to save data');
           }
@@ -249,7 +250,9 @@ import {
   
                     <Grid item xs={12} sm={6}>
                       <FormControl fullWidth error={touched.status && Boolean(errors.status)}>
-                        <TextField
+                      <InputLabel shrink>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></InputLabel>
+
+                        <Select
                           name="status"
                           label={<span>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></span>}
                           variant="outlined"
@@ -258,7 +261,10 @@ import {
                           onChange={handleChange}
                           onBlur={handleBlur}
                           InputLabelProps={{ shrink: true }}
-                        />
+                        >
+                            <MenuItem value="A">Active</MenuItem>
+                           <MenuItem value="I">Inactive</MenuItem>
+                           </Select>
                         {touched.status && errors.status && (
                           <FormHelperText sx={{ color: 'error.main' }}>{errors.status}</FormHelperText>
                         )}

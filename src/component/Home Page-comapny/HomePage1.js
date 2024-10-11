@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidenav from "./Sidenav1";
 import Navbar from "./Navbar1";
 import {
@@ -35,8 +35,9 @@ import Level from "../../images/paym-level-icon.png"
 import Leave from "../../images/paym-leave-icon.png"
 import Designation from "../../images/paym-desiganation-icon.png"
 import Group from "../../images/group-icons.png"
-
-
+import CastForEducationIcon from '@mui/icons-material/CastForEducation';
+import AOS from 'aos'; // Import AOS
+import 'aos/dist/aos.css'; // Import AOS CSS
 
 
 const bounce = keyframes({
@@ -67,10 +68,15 @@ export default function HomePage1() {
         { text: "Jobstatus", icon: <img src={Jobstatus} width={40} height={40}  />  , onclick : () => navigate('/JobStatusFormMaster1')  },
         { text: "Level", icon: <img src={Level} width={40} height={40}  /> , onclick : () => navigate('/LevelFormMaster1')   },
         { text: "Leave", icon: <img src={Leave} width={50} height={40}  />  , onclick : () => navigate('/PaymLeaveMaster1')  },
-        { text: "Group", icon: <img src={Group} width={40} height={40}  />  , onclick : () => navigate('/')  },
+        { text: "Earn Deduct", icon:  <CastForEducationIcon style={{ width: 40, height: 40 }}/>,  onclick : () => navigate('/EarnDeductCompanyMasters')  },
       ];
       
-    
+      useEffect(() => {
+        AOS.init({
+            duration: 1000, // Set to 1 second for quick animation
+            easing: 'ease-in-out', // Optional: Choose an easing function
+        });
+    }, []);
   return (
     <Grid container>
       {/* Navbar and Sidebar */}
@@ -82,6 +88,7 @@ export default function HomePage1() {
             <Sidenav />
             {/* Main Content */}
             <Grid item xs={12} sm={10} md={9} lg={8} xl={7} style={{ marginLeft: "auto", marginRight: "auto", margin: "50px 50px 50px 50px" ,textAlign: 'left' }}>
+            <div data-aos="fade-right">
               <Typography variant="h5" gutterBottom sx={{ color: "black" }}>
                 HR Management System
               </Typography>
@@ -97,6 +104,8 @@ export default function HomePage1() {
                 }}
                 sx={{ mb: 3, bgcolor: "#ffffff", width: "400px" }} // Ensure the input field has a white background for readability
               />
+              </div>
+              <div data-aos="zoom-in-down">
               <Card sx={{ height: "80%", p: 2 }}>
                 <Box
                   sx={{
@@ -143,6 +152,7 @@ export default function HomePage1() {
                   </CardContent>
                 </Box>
               </Card>
+              </div>
             </Grid>
           </Box>
         </div>

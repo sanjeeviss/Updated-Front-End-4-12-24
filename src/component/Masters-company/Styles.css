@@ -1,0 +1,23 @@
+@keyframes fadeInScaleUp {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .animated-message {
+    animation: fadeInScaleUp 2s ease-in-out;
+    font-size: 16px; /* Adjust the font size as needed */
+    background-color: #f0f0f0; /* Grey background color */
+    padding: 10px; /* Space inside the message */
+    margin-bottom: 20px; /* Space below the message */
+    border-radius: 15px; /* Optional: rounded corners */
+  }
