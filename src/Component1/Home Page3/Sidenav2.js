@@ -134,14 +134,14 @@ export default function Sidenav() {
         </DrawerHeader>
         <Divider />
         <List>
-        <ListItem disablePadding sx={{ display: "block" }}>
+        {/* <ListItem disablePadding sx={{ display: "block" }}>
             <Box sx={{ display: "flex", alignItems: "center", marginLeft: 2 }}>
               <Avatar>{sessionStorage.getItem("user").charAt(0)}</Avatar>
               <Typography color={"white"} sx={{ margin: 2 }}>
                 {sessionStorage.getItem("user")}
               </Typography>
             </Box>
-          </ListItem>
+          </ListItem> */}
 
         <ListItem disablePadding sx={{ display: "block" }}  onClick={() => navigate("/EmployeeDashBoard2")}>
             <ListItemButton

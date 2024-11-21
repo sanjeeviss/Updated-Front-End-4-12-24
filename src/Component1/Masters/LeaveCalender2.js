@@ -5,12 +5,10 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { styled } from '@mui/material/styles';
 import WeekendIcon from '@mui/icons-material/Weekend'; // Import the weekend icon
-
 // Import the necessary icons
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CircleIcon from '@mui/icons-material/Circle';
-
 // Import your server configuration and request functions
 import { getRequest, postRequest } from "../../serverconfiguration/requestcomp";
 import { ServerConfig } from "../../serverconfiguration/serverconfig";

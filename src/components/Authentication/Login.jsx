@@ -126,6 +126,8 @@ function LoginOthers(props) {
 
           changeState(true);
           sessionStorage.setItem("user", username);
+          navigate("/HomePage2");
+        
 
           setError("");
           getRequest(ServerConfig.url, PAYMEMPLOYEE).then((e) => {

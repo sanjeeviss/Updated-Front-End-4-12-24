@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, Container, Typography, FormHelperText,Tabs, Tab, Grid, Card, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { TextField, Button, Box, Container, Typography, FormHelperText,Tabs, Tab, Grid, Card, MenuItem, Select, InputLabel, FormControl, FormControlLabel, Checkbox } from '@mui/material';
 import Navbar from "../Home Page-comapny/Navbar1";
 import Sidenav from "../Home Page-comapny/Sidenav1";
 import { postRequest } from '../../serverconfiguration/requestcomp';
@@ -11,13 +11,15 @@ import axios from 'axios';
 import Popover from '@mui/material/Popover';
 import { useNavigate } from "react-router-dom";
 
-const BranchMaster1 = () => {
+export default function BranchMasters2 ()  {
   const [tabValue, setTabValue] = useState(0);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const [popoverMessage, setPopoverMessage] = useState('');
 const[companies,setCompanies]= useState([]);
 const [isloggedin, setisloggedin] = useState(sessionStorage.getItem("user"))
+const [checked, setChecked] = useState(false); // Define the state here
+
 const [pnCompanyId, setPnCompanyId] = useState('');
 const navigate = useNavigate();
 
@@ -141,6 +143,7 @@ const navigate = useNavigate();
       esino: '',
       startDate: '',
       endDate: '',
+      branchType: 'Sub Branch', // Default value
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -148,6 +151,11 @@ const navigate = useNavigate();
       postData(values);
     },
   });
+  const handleChange1 = (event) => {
+    setChecked(event.target.checked);
+    formik.setFieldValue('branchType', event.target.checked ? 'Main Branch' : 'Sub Branch');
+    console.log(event.target.checked ? 'Main Branch' : 'Sub Branch');
+  };
 
   const handleTabChange = (event, newValue) => {
     if (newValue > tabValue) {
@@ -248,27 +256,27 @@ const navigate = useNavigate();
 
  
 
-  const postData = async () => {
-    try {
-      const query = `
-       INSERT INTO [dbo].[paym_Branch] 
-([pn_CompanyID], [BranchCode], [BranchName], [Address_Line1], [Address_Line2], [City], [State], [Country], [ZipCode], [Phone_No], [Fax_No], [Email_Id], [AlternateEmail_Id], [Branch_User_Id], [Branch_Password], [status], [PFno], [Esino], [start_date], [end_date])
-VALUES  
-('${formik.values.pnCompanyId}', '${formik.values.branchCode}', '${formik.values.branchName}', '${formik.values.addressLine1}', '${formik.values.addressLine2}', '${formik.values.city}', '${formik.values.state}', '${formik.values.country}', '${formik.values.zipCode}', '${formik.values.phoneNo}', '${formik.values.faxNo}', '${formik.values.emailId}', '${formik.values.alternateEmailId}', '${formik.values.branchUserId}', '${formik.values.branchPassword}', '${formik.values.status || ''}', '${formik.values.pfno || ''}', '${formik.values.esino || ''}', '${formik.values.startDate}', '${formik.values.endDate}') `;
 
-      const response = await postRequest(ServerConfig.url, REPORTS, { query });
-      if (response.status === 200) {
-        alert('Data saved successfully!');
-        navigate("/DivisionMaster1");
-        handleCancel();
-      } else {
-        alert`(Unexpected response status: ${response.status})`;
+    const postData = async () => {
+      try {
+        const query = `
+          INSERT INTO [dbo].[paym_Branch] 
+          ([pn_CompanyID], [BranchCode], [BranchName], [Address_Line1], [Address_Line2], [City], [State], [Country], [ZipCode], [Phone_No], [Fax_No], [Email_Id], [AlternateEmail_Id], [Branch_User_Id], [Branch_Password], [status], [PFno], [Esino], [start_date], [end_date], [BranchType])
+          VALUES  
+          ('${formik.values.pnCompanyId}', '${formik.values.branchCode}', '${formik.values.branchName}', '${formik.values.addressLine1}', '${formik.values.addressLine2}', '${formik.values.city}', '${formik.values.state}', '${formik.values.country}', '${formik.values.zipCode}', '${formik.values.phoneNo}', '${formik.values.faxNo}', '${formik.values.emailId}', '${formik.values.alternateEmailId}', '${formik.values.branchUserId}', '${formik.values.branchPassword}', '${formik.values.status || ''}', '${formik.values.pfno || ''}', '${formik.values.esino || ''}', '${formik.values.startDate}', '${formik.values.endDate}', '${formik.values.branchType}')`;
+    
+        const response = await postRequest(ServerConfig.url, REPORTS, { query });
+        if (response.status === 200) {
+          alert('Data saved successfully!');
+        
+        } else {
+          alert(`Unexpected response status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Error in postData:', error);
+        alert(`Error: ${error.message || 'An unknown error occurred'}`);
       }
-    } catch (error) {
-      console.error('Error in postData:', error);
-      alert`(Error: ${error.message || 'An unknown error occurred'})`;
-    }
-  };
+    };
 
   const fetchCompanies = async () => {
     try {
@@ -315,10 +323,21 @@ VALUES
             <Sidenav />
             <Grid item xs={12} sm={10} md={9} lg={8} xl={7} style={{ marginLeft: "auto", marginRight: "auto" }}>
               <Container maxWidth="md" sx={{ p: 2 }}>
-                <Typography variant="h5" fontWeight={'425'} gutterBottom textAlign={'left'}>
-                  Enter Branch Details
-                </Typography>
+              
                 <Card sx={{ width: "750px", padding: "15px" }}>
+                <div style={{justifyContent:'space-between',display:'flex'}}>
+               <div>
+                <Typography variant="h5" fontWeight={'425'} gutterBottom textAlign={'left'}>
+                Sub Branch Details
+                </Typography>
+                </div>
+                <div>
+                <FormControlLabel
+      control={<Checkbox checked={true} disabled />} // Checked and disabled to freeze as "Main Branch"
+      label="Sub Branch" // Label set to "Main Branch"
+    />
+    </div>
+    </div>
                   <Tabs value={tabValue} onChange={handleTabChange} aria-label="paym-branch-details-tabs">
                     <Tab label="General Information" />
                     <Tab label="Address Details" />
@@ -835,4 +854,3 @@ VALUES
     </Grid>
   );
 };
-export default BranchMaster1;

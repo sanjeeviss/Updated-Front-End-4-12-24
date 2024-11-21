@@ -37,8 +37,9 @@ const PaymLoanTable = () => {
     } 
 
   return (
-    <div> <JsonToTable json={data}/>
-    <Grid margin={5}><Button variant='outlined' color='success' onClick={handleonclick}>Add<PlusIcon/></Button></Grid></div>
+    <div><JsonToTable json={data}/>
+    <Grid margin={5}><Button variant='outlined' color='success' onClick={handleonclick}>Add<PlusIcon/></Button></Grid>
+    </div>
   )
 }
 

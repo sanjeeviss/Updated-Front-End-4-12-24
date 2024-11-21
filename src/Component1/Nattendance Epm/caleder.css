@@ -1,0 +1,24 @@
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+    margin: 1em auto 2px auto!important;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
+height: auto!important;
+width: 90%!important;
+text-align: center;
+
+}
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
+    min-height: auto!important;
+}
+.fc .fc-daygrid-day-top {
+    height: 42px !important;
+}
+.fc .fc-daygrid-event{
+    background-color: rgb(238, 238, 168);
+}
+.fc .fc-daygrid-day-frame {
+    /* min-height: 149%; */
+    /* position: relative; */
+    height: 90px;
+}

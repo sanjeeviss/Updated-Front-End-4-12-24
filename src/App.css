@@ -158,3 +158,15 @@
 .Background {
   background-color: #ccc;
 }
+.active{ 
+  border-left: 4px solid #00B5B1!important ;
+      color: #00B5B1!important;
+      background-color: #EAF9F9!important;
+  position: relative;
+  }
+  .pending{
+    border-right: none ;
+    color: #000000!important;
+    background-color: #EAF9F9;
+
+  }

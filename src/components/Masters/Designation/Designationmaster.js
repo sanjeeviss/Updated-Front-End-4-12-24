@@ -22,6 +22,7 @@ import {
   Toolbar,
   InputBase,
   Snackbar,
+  Card,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
@@ -32,7 +33,6 @@ import AddIcon from '@mui/icons-material/Add';
 import Sidenav from "../../Home Page/Sidenav";
 import Navbar from "../../Home Page/Navbar";
 import { useNavigate } from "react-router-dom";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -42,13 +42,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#ffffff",
     color: "#000000",
   },
-  drawer: {
-    width: 300,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: 300,
-  },
+  // drawer: {
+  //   width: 300,
+  //   flexShrink: 0,
+  // },
+  // drawerPaper: {
+  //   width: 300,
+  // },
   content: {
     flexGrow: 1,
     padding: theme.spacing(1),
@@ -221,29 +221,19 @@ const filteredDesignations = designations.filter((designation, index) => {
 
 
   return (
-    <Grid item xs={12}>
-      <div style={{ backgroundColor: "#fff" }}>
-        <Navbar />
-        <Box height={30} />
-        <Box sx={{ display: "flex" }}>
-          <Sidenav />
-          <Grid
-            item
-            xs={12}
-            sm={10}
-            md={9}
-            lg={8}
-            xl={7}
-            style={{
-              marginLeft: "auto",
-              marginRight: "auto",
-              margin: "0 50px 50px 50px",
-            }}
-          >
-            <div className={classes.root}>
-              <CssBaseline />
+    <Grid  item xs={12}>
+    <div style={{ backgroundColor: "#fff" }}>
+      <Navbar />
+      <Box height={40} />
+      <Box sx={{ display: "flex" }}>
+        <Sidenav />
+        <Grid item  xs={12}  style={{margin:'0 auto'}}>
+          <div  className="background1" >
+        <Grid  container >
+<Card  style={{ maxWidth: 1100, width: "100%" ,margin:'20px' ,padding:'20px'}}>  
+          <div className={classes.root}>
+            <CssBaseline />
               <main className={classes.content}>
-                <div className={classes.toolbar} />
                 <div className={classes.header}>
                   <Typography variant="h4" style={{ fontWeight: "500" }}>
                     Designation
@@ -343,12 +333,16 @@ const filteredDesignations = designations.filter((designation, index) => {
                   onClose={() => setSnackbarOpen(false)}
                   message={snackbarMessage}
                 />
-              </main>
-            </div>
-          </Grid>
-        </Box>
-      </div>
-    </Grid>
+           </main>
+           </div>
+           </Card>
+           </Grid>
+           </div>
+           </Grid>
+           </Box>
+           </div>
+           </Grid>
+      
   );
 }
 

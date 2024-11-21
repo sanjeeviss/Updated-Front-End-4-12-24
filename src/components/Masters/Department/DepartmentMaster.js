@@ -20,7 +20,8 @@ import {
   CssBaseline,
   AppBar,
   Toolbar,
-  InputBase
+  InputBase,
+  Card
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
@@ -36,22 +37,22 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#ffffff",
-    color: "#000000",
-  },
-  drawer: {
-    width: 300,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: 300,
-  },
+  // appBar: {
+  //   zIndex: theme.zIndex.drawer + 1,
+  //   backgroundColor: "#ffffff",
+  //   color: "#000000",
+  // },
+  // drawer: {
+  //   width: 300,
+  //   flexShrink: 0,
+  // },
+  // drawerPaper: {
+  //   width: 300,
+  // },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(1),
-    marginLeft: theme.spacing(0),
+    // padding: theme.spacing(1),
+    // marginLeft: theme.spacing(0),
   },
   toolbar: theme.mixins.toolbar,
   searchContainer: {
@@ -63,10 +64,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     maxWidth: 250,
   },
-  inputBase: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
+  // inputBase: {
+  //   marginLeft: theme.spacing(1),
+  //   flex: 1,
+  // },
   searchIcon: {
     padding: theme.spacing(0.5),
   },
@@ -86,9 +87,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#3a3789",
     },
   },
-  importButton: {
-    marginRight: theme.spacing(0.4),
-  },
+  // importButton: {
+  //   marginRight: theme.spacing(0.4),
+  // },
   header: {
     display: "flex",
     alignItems: "center",
@@ -113,10 +114,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   
   },
-  formControl: {
-    margin: theme.spacing(2),
-    minWidth: 120,
-  },
+  // formControl: {
+  //   // margin: theme.spacing(2),
+  //   minWidth: 120,
+  // },
 }));
 
 function DepartmentHome() {
@@ -216,29 +217,23 @@ function DepartmentHome() {
     
 
   return (
-    <Grid item xs={12}>
-      <div style={{ backgroundColor: "#fff" }}>
-        <Navbar />
-        <Box height={30} />
-        <Box sx={{ display: "flex" }}>
-          <Sidenav />
-          <Grid
-            item
-            xs={12}
-            sm={10}
-            md={9}
-            lg={8}
-            xl={7}
-            style={{
-              marginLeft: "auto",
-              marginRight: "auto",
-              margin: "0 50px 50px 50px",
-            }}
-          >
-            <div className={classes.root}>
-              <CssBaseline />
-              <main className={classes.content}>
-                <div className={classes.toolbar} />
+    <Grid  item xs={12}>
+    <div style={{ backgroundColor: "#fff" }}>
+      <Navbar />
+      <Box height={40} />
+      <Box sx={{ display: "flex" }}>
+        <Sidenav />
+        <Grid item  xs={12}  style={{margin:'0 auto'}}>
+      
+
+        <div  className="background1" >
+        <Grid  container >
+<Card  style={{ maxWidth: 1100, width: "100%" ,margin:'20px' ,padding:'20px'}}>  
+
+          <div className={classes.root}>
+            <CssBaseline />
+            <main className={classes.content}>
+                {/* <div className={classes.toolbar} /> */}
                 <div className={classes.header}>
                   <Typography variant="h4" style={{ fontWeight: "500" }}>
                     Department
@@ -325,12 +320,15 @@ function DepartmentHome() {
                     </TableBody>
                   </Table>
                 </TableContainer>
-              </main>
+            </main>
             </div>
-          </Grid>
-        </Box>
-      </div>
-    </Grid>
+            </Card>
+            </Grid>
+            </div>
+            </Grid>
+            </Box>
+            </div>
+            </Grid>
   );
 }
 

@@ -22,12 +22,12 @@ import { useEffect } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { navigate, useNavigate } from 'react-router-dom';
 import settingss from"../../images/Settingss-icon.png"
+import { Gradient } from '@mui/icons-material';
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  backgroundColor: '#fff',
-  borderRadius:"5px" // Black color for the AppBar
+  background: 'linear-gradient(#0771e3, #7aabe4 )', // Correct syntax with quotes
+  borderRadius: '5px', // Border radius for the AppBar
 }));
-
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,

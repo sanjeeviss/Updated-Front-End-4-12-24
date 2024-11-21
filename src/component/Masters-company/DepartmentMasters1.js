@@ -7,99 +7,204 @@ import {
   Typography,
   FormControl,
   MenuItem,
-  Select,
-  FormHelperText,
-  Box,
+  Checkbox,
+  ListItemText,
+  Menu,
   Container,
+  Box,
   CardContent,
-  InputLabel,
+  IconButton,
+  FormHelperText,
+  ListItem,
+  ListItemIcon,
+  Divider
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { postRequest } from '../../serverconfiguration/requestcomp';
 import { ServerConfig } from '../../serverconfiguration/serverconfig';
-import { useNavigate } from 'react-router-dom';
 import { REPORTS, SAVE } from '../../serverconfiguration/controllers';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Navbar from "../Home Page-comapny/Navbar1";
 import Sidenav from "../Home Page-comapny/Sidenav1";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import DeleteIcon from '@mui/icons-material/Delete'; // Import Delete Icon
 
-export default function DepartmentFormMaster1() {
+export default function CompanyMasterss1() {
   const navigate = useNavigate();
   const [company, setCompany] = useState([]);
   const [branch, setBranch] = useState([]);
   const [pnCompanyId, setPnCompanyId] = useState('');
   const [isloggedin, setIsloggedin] = useState(sessionStorage.getItem('user'));
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedBranchIds, setSelectedBranchIds] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [error, setError] = useState(null);
+  const [departmentData, setDepartmentData] = useState([{ vDepartmentName: '', status: '' }]);
 
-  // Fetch company data
   useEffect(() => {
     async function getData() {
       try {
         const companyData = await postRequest(ServerConfig.url, REPORTS, {
-          query: `select * from paym_Company where company_user_id = '${isloggedin}'`,
+          query:` SELECT * FROM paym_Company WHERE company_user_id = '${isloggedin}'`,
         });
+        console.log('Company Data:', companyData.data); // Log the company data
         setCompany(companyData.data);
         if (companyData.data.length > 0) {
-          setPnCompanyId(companyData.data[0].pn_CompanyID); // Set default company ID
+          setPnCompanyId(companyData.data[0].pn_CompanyID);
         }
       } catch (error) {
-        console.error('Error fetching company data:', error);
+        setError('Error fetching company data');
       }
     }
     getData();
   }, [isloggedin]);
 
-  // Fetch branch data based on company selection
   useEffect(() => {
     async function getData() {
       try {
-        const branchData = await postRequest(ServerConfig.url, REPORTS, {
-          query: `select * from paym_branch where pn_CompanyID = '${pnCompanyId}'`,
-        });
-        setBranch(branchData.data);
+        if (pnCompanyId) {
+          const branchData = await postRequest(ServerConfig.url, REPORTS, {
+            query: `SELECT * FROM paym_branch WHERE pn_CompanyID = '${pnCompanyId}'`,
+          });
+          setBranch(branchData.data);
+        }
       } catch (error) {
-        console.error('Error fetching branch data:', error);
+        setError('Error fetching branch data');
       }
     }
-    if (pnCompanyId) {
-      getData();
-    }
+    getData();
   }, [pnCompanyId]);
 
-  // Form validation schema using Yup
-  const validationSchema = Yup.object({
+  useEffect(() => {
+    setSelectAll(selectedBranchIds.length === branch.length);
+  }, [selectedBranchIds, branch]);
+
+  const validationSchema = Yup.object().shape({
     pnCompanyId: Yup.string().required('Please select a Company ID'),
-    pnBranchId: Yup.string().required('Please select a Branch ID'),
-    vDepartmentName: Yup.string()
-      .matches(/^[A-Za-z0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{1,40}$/, 'Department Name must be alphanumeric and up to 40 characters')
-      .required('Department Name is required'),
-    status: Yup.string()
-      .matches(/^[A-Za-z]$/, 'Status must contain only alphabetic characters')
-      .required('Status is required'),
+    pnBranchId: Yup.array(),
+    departmentData: Yup.array().of(
+      Yup.object().shape({
+        vDepartmentName: Yup.string()
+          .matches(/^[A-Za-z0-9\s]{1,40}$/, 'Department Name must be alphanumeric and up to 40 characters')
+          .required('Department Name is required'),
+        status: Yup.string()
+          .matches(/^[A-Za-z]{1,10}$/, 'Status must be a  alphabetic character')
+          .required('Status is required'),
+      })
+    ),
   });
 
-  // Handle form submission
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const response = await postRequest(ServerConfig.url, SAVE, {
-        query:` INSERT INTO [dbo].[paym_Department]([pn_CompanyID],[pn_BranchID],[v_DepartmentName],[status]) VALUES ('${values.pnCompanyId}', '${values.pnBranchId}', '${values.vDepartmentName}', '${values.status}')`,
-      });
+      const queries = [];
 
-      if (response.status === 200) {
-        alert('Data saved successfully');
-        resetForm(); // Reset the form after successful submission
-        navigate('/DesignationMasterForm1'); // Adjust navigation if needed
+      // Check if branches are selected
+      if (selectedBranchIds.length > 0) {
+        // Create a query for each selected branch
+        selectedBranchIds.forEach((branchId) => {
+          values.departmentData.forEach((department) => {
+            const query = 
+              `INSERT INTO [dbo].[paym_Department] 
+              ([pn_CompanyID], [pn_BranchID], [v_DepartmentName], [status]) 
+              VALUES 
+              ('${values.pnCompanyId}', '${branchId}', '${department.vDepartmentName}', 
+              CASE 
+                WHEN '${department.status}' = 'Active' THEN 'A' 
+                ELSE '${department.status}' 
+              END)`
+            ;
+            console.log("Generated Query for Branch:", query);
+            queries.push(postRequest(ServerConfig.url, SAVE, { query }));
+          });
+        });
+      } 
+      // If no branches are selected and the branch list is empty
+      else if (branch.length === 0) {
+        values.departmentData.forEach((department) => {
+          const query = 
+            `INSERT INTO [dbo].[paym_Department] 
+            ([pn_CompanyID], [pn_BranchID], [v_DepartmentName], [            status]) 
+            VALUES 
+            ('${values.pnCompanyId}', NULL, '${department.vDepartmentName}', 
+            CASE 
+              WHEN '${department.status}' = 'Active' THEN 'A' 
+              ELSE '${department.status}' 
+            END)`
+          ;
+          console.log("Generated Query with NULL BranchID:", query);
+          queries.push(postRequest(ServerConfig.url, SAVE, { query }));
+        });
       } else {
-        alert('Failed to save data');
+        setError('Please select at least one branch or ensure branches exist for the company.');
+        return;
       }
+
+      // Execute all queries
+      const responses = await Promise.all(queries);
+
+      // Log responses for each query
+      responses.forEach((response, index) => {
+        console.log(`Response for query ${index + 1}:`, response);
+        if (response.status !== 200) {
+          throw new Error(`Failed to save for query ${index + 1}: ${response.statusText}`);
+        }
+      });
+      alert('Data saved successfully');
+      resetForm();
+      navigate('/DesignationMasterForm1');
+
     } catch (error) {
-      console.error('Error saving data:', error);
-      alert('Failed to save data');
+      console.error("Error saving data:", error);
+      setError('Error saving data: ' + error.message);
     }
   };
 
-  // Handle form cancellation
   const handleCancel = (resetForm) => {
-    resetForm(); // Reset the form on cancel
+    resetForm();
+  };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleBranchChange = (branchId) => {
+    setSelectedBranchIds((prev) =>
+      prev.includes(branchId)
+        ? prev.filter((id) => id !== branchId)
+        : [...prev, branchId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedBranchIds([]);
+    } else {
+      setSelectedBranchIds(branch.map(b => b.pn_BranchID));
+    }
+  };
+
+  const handleAddDepartment = (departmentData, setFieldValue) => {
+    const updatedDepartmentData = [
+      ...departmentData, 
+      { vDepartmentName: '', status: 'Active' } // Default status 'A' for new rows
+    ];
+    setFieldValue('departmentData', updatedDepartmentData);
+  };
+
+  const handleRemoveDepartment = (index, values, setFieldValue) => {
+    // Create a copy of the current designationData array
+    const updatedDepartmentData = [...values.departmentData];
+
+    // Remove the specific row by filtering out the index
+    updatedDepartmentData.splice(index, 1);
+
+    // Update the form values using setFieldValue
+    setFieldValue('departmentData', updatedDepartmentData);
   };
 
   return (
@@ -108,136 +213,312 @@ export default function DepartmentFormMaster1() {
         <div style={{ backgroundColor: "#fff" }}>
           <Navbar />
           <Box height={30} />
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{backgroundColor:'#FCFCFC', display: "flex" }}>
             <Sidenav />
-            <Grid item xs={12} sm={10} md={9} lg={8} xl={7} style={{ marginLeft: "auto", marginRight: "auto" }}>
-              <Container maxWidth="md" sx={{ p: 2 }}>
-                <Grid style={{ padding: '80px 5px 0 5px' }}>
-                  <Card style={{ maxWidth: 600, margin: '0 auto' }}>
-                    <CardContent>
-                      <Typography variant="h5" gutterBottom color="textPrimary" align="center">
-                        Department Form
+              <Container >
+            <Grid item xs={12} sm={12} md={8} lg={8} xl={8} >
+                
+                  <Container>
+                    <div>
+                      <Typography variant="h5" fontWeight='bolder' sx={{letterSpacing:'0.8px',paddingTop:'6rem'}} py={3} gutterBottom color="textPrimary" textAlign='start'>
+                        Department
                       </Typography>
+                      <Divider
+                      sx={{
+                        backgroundColor: '#f0f0f0', // Red divider
+                        height: '1px', // Set the thickness of the divider
+                      }}/>
+                      {error && (
+                        <Typography variant="body1" color="error.main" align="center">
+                          {error}
+                        </Typography>
+                      )}
                       <Formik
                         initialValues={{
                           pnCompanyId: pnCompanyId || '',
-                          pnBranchId: '',
-                          vDepartmentName: '',
-                          status: '',
+                          departmentData: departmentData.length > 0
+                            ? departmentData.map((department) => ({
+                                vDepartmentName: department.vDepartmentName || '',
+                                status: department.status || 'Active'
+                              }))
+                            : [{ vDepartmentName: '', status: 'Active' }]
                         }}
                         validationSchema={validationSchema}
-                        onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}
-                        enableReinitialize
+                        onSubmit={handleSubmit}
+                        enableReinitialize // Add this line to reinitialize Formik values
+
                       >
-                        {({ values, handleChange, handleBlur, errors, touched, resetForm }) => (
+                        {({ values, handleChange, handleBlur, errors, touched, resetForm, setFieldValue }) => (
                           <Form>
-                            <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-                              <FormControl fullWidth error={touched.pnCompanyId && Boolean(errors.pnCompanyId)}>
-                      <TextField
-                        value={company.find((c) => c.pn_CompanyID === values.pnCompanyId)?.CompanyName || ''}
-                        variant="outlined"
-                        fullWidth
-                        InputProps={{ readOnly: true }}
-                      />
-                      {touched.pnCompanyId && errors.pnCompanyId && (
-                        <FormHelperText sx={{ color: 'error.main' }}>{errors.pnCompanyId}</FormHelperText>
-                      )}
-                    </FormControl>
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth error={touched.pnBranchId && Boolean(errors.pnBranchId)}>
-                                  <Select
-                                    name="pnBranchId"
-                                    value={values.pnBranchId}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    displayEmpty
-                                  >
-                                    <MenuItem value="" disabled>
-                                      Select a Branch
-                                    </MenuItem>
-                                    {branch.map(b => (
-                                      <MenuItem key={b.pn_BranchID} value={b.pn_BranchID}>
-                                        {b.BranchName}
-                                      </MenuItem>
-                                    ))}
-                                  </Select>
-                                  {touched.pnBranchId && errors.pnBranchId && (
-                                    <FormHelperText sx={{ color: 'error.main' }}>{errors.pnBranchId}</FormHelperText>
-                                  )}
-                                </FormControl>
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth error={touched.vDepartmentName && Boolean(errors.vDepartmentName)}>
-                                  <TextField
-                                    name="vDepartmentName"
-                                    label={<span>Department Name<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></span>}
-                                    variant="outlined"
-                                    fullWidth
-                                    value={values.vDepartmentName}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    InputLabelProps={{ shrink: true }}
-                                  />
-                                  {touched.vDepartmentName && errors.vDepartmentName && (
-                                    <FormHelperText sx={{ color: 'error.main' }}>{errors.vDepartmentName}</FormHelperText>
-                                  )}
-                                </FormControl>
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-  <FormControl fullWidth error={touched.status && Boolean(errors.status)}>
-    <InputLabel shrink>Status<span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></InputLabel>
-    <Select
-      name="status"
-      label="Status"
-      value={values.status}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      variant="outlined"
-      fullWidth
+                            <Grid container spacing={2} rowSpacing={5} marginTop={'5px'}>
+  <Grid item xs={12} sm={6}>
+    <FormControl fullWidth>
+      <TextField
+      label="Company Name"
+        value={company.find((c) => c.pn_CompanyID === values.pnCompanyId)?.CompanyName || ''}
+        variant="outlined"
+        fullWidth
+        InputProps={{
+          readOnly: true,
+          style: {
+            backgroundColor: '#f0f0f0', // Light grey background
+          },
+        }}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '10px', // Apply border radius to the outer input element
+          },
+        }}
+      />
+    </FormControl>
+  </Grid>
+
+  <Grid item xs={12} sm={6}>
+    <FormControl fullWidth error={touched.pnBranchId && Boolean(errors.pnBranchId)}>
+      <div>
+        <TextField
+          value={branch.length > 0 ? branch.filter(b => selectedBranchIds.includes(b.pn_BranchID)).map(b => b.BranchName).join(', ') : 'No branches'}
+          variant="outlined"
+          fullWidth
+          onClick={handleMenuClick}
+          InputProps={{
+            readOnly: true,
+            style: {
+              backgroundColor: '#f0f0f0', // Light grey background
+              borderRadius: '10px', // Note: This style will not apply to the outer border
+            },
+            endAdornment: (
+              <IconButton size="small" aria-label="select branches">
+                <ArrowDropDownIcon />
+              </IconButton>
+            ),
+          }}
+          label="Branch List"
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '10px', // Apply border radius to the outer input element
+            },
+          }}
+        />
+        {Boolean(errors.pnBranchId) && (
+          <FormHelperText>{errors.pnBranchId}</FormHelperText>
+        )}
+      </div>
+      <Menu 
+  anchorEl={anchorEl} 
+  open={Boolean(anchorEl)} 
+  onClose={handleMenuClose} 
+  sx={{ 
+    mt: '5px', // Optional: Add margin to position the dropdown lower
+  }}
+  anchorOrigin={{
+    vertical: 'bottom',
+    horizontal: 'right', // Aligns the dropdown to the right
+  }}
+  transformOrigin={{
+    vertical: 'top',
+    horizontal: 'right', // Aligns the dropdown to the right
+  }}
+>
+  <ListItem 
+    button 
+    onClick={handleSelectAll} 
+    sx={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      width: '100%', 
+      fontWeight: 'bold', 
+      borderRadius: '10px', 
+      overflow: 'hidden' 
+    }} // Add border radius to the list item
+  >
+    <Box 
+      sx={{ 
+        borderRadius: '10%', // Round checkbox appearance
+        overflow: 'hidden',
+      }}
     >
-      <MenuItem value="A">Active</MenuItem>
-      <MenuItem value="I">Inactive</MenuItem>
-    </Select>
-    {touched.status && errors.status && (
-      <FormHelperText sx={{ color: 'error.main' }}>{errors.status}</FormHelperText>
-    )}
-  </FormControl>
-</Grid>
-                              <Grid container spacing={1} paddingTop="20px">
-                  <Grid item xs={12} align="right">
-                    <Button
-                      style={{ margin: '0 5px' }}
-                      type="button"
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => handleCancel(resetForm)} // Call handleCancel on click
-                    >
-                      CANCEL
-                    </Button>
-                    <Button
-                      style={{ margin: '0 5px' }}
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                    >
-                      SAVE
-                    </Button>
-                  </Grid>
-                </Grid>
-                            </Grid>
-                          </Form>
-                        )}
-                      </Formik>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Container>
-            </Grid>
-          </Box>
-        </div>
-      </Grid>
-    </Grid>
-  );
-}
+      <Checkbox 
+        checked={selectAll} 
+        sx={{ 
+          '&.Mui-checked': {
+            color: 'primary.main', // Change the checked color if needed
+          },
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)', // Optional: background on hover
+          },
+          padding: '6px', // Adjust padding for better size control
+        }}
+      />
+    </Box>
+    <ListItemText primary="Select All" />
+  </ListItem>
+
+  {branch.map((b) => (
+    <MenuItem 
+      key={b.pn_BranchID} 
+      onClick={() => handleBranchChange(b.pn_BranchID)} 
+      sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        width: '100%', 
+        fontWeight: 'bold', 
+        borderRadius: '20px', 
+        overflow: 'hidden' 
+      }} // Add border radius to the menu item
+    >
+      <Box 
+        sx={{ 
+          borderRadius: '50%', // Round checkbox appearance
+          overflow: 'hidden',
+        }}
+      >
+        <Checkbox 
+          checked={selectedBranchIds.includes(b.pn_BranchID)} 
+          sx={{ 
+            '&.Mui-checked': {
+              color: 'primary.main', // Change the checked color if needed
+            },
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)', // Optional: background on hover
+            },
+            padding: '6px', // Adjust padding for better size control
+          }}
+        />
+      </Box>
+      <ListItemText primary={b.BranchName} />
+    </MenuItem>
+  ))}
+</Menu>
+
+
+ 
+   
+    </FormControl>
+  </Grid>
+
+
+
+                              {values.departmentData.map((department, index) => (
+                                <Grid item xs={12} key={index}>
+                                  <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs={6} md={4}>
+                                      <div style={{display:'flex',flexDirection:'column',position:'relative'}}>
+                                      <FormControl fullWidth error={touched.departmentData && touched.departmentData[index] && Boolean(errors.departmentData && errors.departmentData[index] && errors.departmentData[index].vDepartmentName)}>
+                                        <TextField
+                                          name={`departmentData.${index}.vDepartmentName`}
+                                          label={<span>Department Name <span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></span>}
+                                          variant="outlined"
+                                          fullWidth
+                                          value={department.vDepartmentName}
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          InputProps={{
+                                            style: {
+                                              backgroundColor: '#f0f0f0', // Light grey background color
+                                              borderRadius: '10px', // Border radius
+                                            },
+                                          }}
+                                        />
+                                      
+                                      </FormControl>
+                                   
+                                      {(touched.departmentData && touched.departmentData[index] && errors.departmentData && errors.departmentData[index] && errors.departmentData[index].vDepartmentName) && (
+                                          <Typography sx={{ color: 'error.main',position:'absolute',top:'55px',fontSize:'14px' }}>
+                                            {errors.departmentData[index].vDepartmentName}
+                                          </Typography>
+                                        )}
+                                        </div>
+                                        </Grid>
+                                    <Grid item xs={6} md={4}>
+                                      <FormControl style={{position:'relative'}} fullWidth error={touched.departmentData && touched.departmentData[index] && Boolean(errors.departmentData && errors.departmentData[index] && errors.departmentData[index].status)}>
+                                        <TextField
+                                          name={`departmentData.${index}.status`}
+                                          label={<span>Status <span style={{ color: 'red', marginLeft: '0.2rem' }}>*</span></span>}
+                                          variant="outlined"
+                                          fullWidth
+                                          value={department.status}
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          InputProps={{
+                                            style: {
+                                              backgroundColor: '#f0f0f0', // Light grey background color
+                                              borderRadius: '10px', // Border radius
+                                            },
+                                          }}
+                                        />
+                                        {(touched.departmentData && touched.departmentData[index] && errors.departmentData && errors.departmentData[index] && errors.departmentData[index].status) && (
+                                          <FormHelperText sx={{ color: 'error.main',position:'absolute' }}>
+                                            {errors.departmentData[index].status}
+                                          </FormHelperText>
+                                        )}
+                                      </FormControl>
+                                    </Grid>
+                                    <Grid item xs={4} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                      {values.departmentData.length > 1 && (
+                                        <Button
+                                          type="button"
+                                          variant="contained"
+                                          color="secondary"
+                                          onClick={() => handleRemoveDepartment(index, values, setFieldValue)}  // Pass the form values and setFieldValue
+                                          style={{ marginRight: '10px' }} 
+                                        > 
+                                          Remove
+                                        </Button>
+                                      )}
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              ))}
+                              <Grid item xs={12}>
+                                <Grid container spacing={2} justifyContent="flex-end">
+                                  <Grid item>
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      onClick={() => handleAddDepartment(values.departmentData, setFieldValue)}  // Updated function
+                                      style={{ minWidth: '70px' }} // Adjust the width if necessary
+                                    >
+                                      Add Row
+                                    </Button>
+                                  </Grid>
+                                  <Grid item>
+                                    <Button
+                                                                          type="button"
+                                                                          variant="contained"
+                                                                          color="secondary"
+                                                                          fullWidth
+                                                                          onClick={() => handleCancel(resetForm)}
+                                                                          style={{ minWidth: '70px' }} 
+                                                                        >
+                                                                          Cancel
+                                                                        </Button>
+                                                                      </Grid>
+                                                                      <Grid item>
+                                                                        <Button
+                                                                          type="submit"
+                                                                          variant="contained"
+                                                                          color="primary"
+                                                                          fullWidth
+                                                                          style={{ minWidth: '70px' }} 
+                                                                        >
+                                                                          Save
+                                                                        </Button>
+                                                                      </Grid>
+                                                                    </Grid>
+                                                                  </Grid>
+                                                                </Grid>
+                                                              </Form>
+                                                            )}
+                                                          </Formik>
+                                                        </div>
+                                                      </Container>
+                                                  
+                                                </Grid>
+                                                  </Container>
+                                              </Box>
+                                            </div>
+                                          </Grid>
+                                        </Grid>
+                                      );
+                                    }

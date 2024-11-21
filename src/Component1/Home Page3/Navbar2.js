@@ -22,6 +22,10 @@ import { useEffect } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { navigate, useNavigate } from 'react-router-dom';
 import settingss from"../../images/Settingss-icon.png"
+import { ServerConfig } from '../../serverconfiguration/serverconfig';
+import { REPORTS } from '../../serverconfiguration/controllers';
+import { postRequest } from '../../serverconfiguration/requestcomp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
   backgroundColor: '#fff',
@@ -74,12 +78,61 @@ export default function Navbar() {
   const updateOpen = useAppStore((state) => state.updateOpen);
   const dopen = useAppStore((state) => state.dopen);
   const isLoggedIn = sessionStorage.getItem("user") !== null;
-
+  const [employeeFirstName, setEmployeeFirstName] = useState('');
+  const [employeeImage, setEmployeeImage] = useState(null); 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
 
- 
+  useEffect(() => {
+    async function getData() {
+      try {
+        const empCode = sessionStorage.getItem('user');
+        if (empCode) {
+          // Fetch employee data from paym_Employee
+          const employeeData = await postRequest(ServerConfig.url, REPORTS, {
+            query: `SELECT * FROM paym_Employee WHERE EmployeeCode = '${empCode}'`,
+          });
+      if (employeeData.data && employeeData.data.length > 0) {
+            const fullName = employeeData.data[0].Employee_Full_Name;
+            const firstName = fullName.split(' ')[0];
+            setEmployeeFirstName(firstName);
+
+          if (employeeData.data && employeeData.data.length > 0) {
+            const employeeID = employeeData.data[0].pn_EmployeeID;
+  
+            // Fetch image data from paym_employee_Profile1
+            const employeeProfileData = await postRequest(ServerConfig.url, REPORTS, {
+              query: `SELECT * FROM paym_employee_Profile1 WHERE pn_EmployeeID = '${employeeID}'`,
+            });
+  
+            if (employeeProfileData.data && employeeProfileData.data.length > 0) {
+              const imageData = employeeProfileData.data[0].image_data;
+  
+              if (imageData) {
+                // Prepend the MIME type to the base64 string
+                const base64Image = `data:image/jpeg;base64,${imageData}`;
+  
+                // Set the image for Avatar
+                setEmployeeImage(base64Image);
+              } else {
+                console.log("Image data is null or undefined for Employee ID:", employeeID);
+              }
+            } else {
+              console.log("No matching profile data found for Employee ID:", employeeID);
+            }
+          }
+        }
+      } 
+    }
+    catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    }
+  
+    
+    getData();
+  }, []); 
 
   const handleLogout = () => {
     // Clear sessionStorage
@@ -131,6 +184,8 @@ export default function Navbar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Log out</MenuItem>
+
     </Menu>
   );
 
@@ -244,7 +299,7 @@ export default function Navbar() {
               </Badge>
             </IconButton>
           
-            <IconButton
+            {/* <IconButton
               size="large"
               edge="end"
               
@@ -257,13 +312,22 @@ export default function Navbar() {
 
             >
               <img src={settingss} width={25} height={25} color='black' sizes=''/>
+            </IconButton> */}
+               <Avatar src={employeeImage || undefined} alt="Employee Image" style={{marginLeft:3}}/>
+            <Typography style={{ color: 'black', marginLeft: 8, cursor: 'pointer' }}>
+              Hi, {employeeFirstName}
+            </Typography>
+            <IconButton onClick={handleProfileMenuOpen} >
+              <ArrowDropDownIcon />
             </IconButton>
-            <IconButton
+        
+          
+            {/* <IconButton
             color="black"
             aria-label="Log out"
             onClick={handleLogout}>
             <LogoutIcon />
-          </IconButton>
+          </IconButton> */}
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
             <IconButton

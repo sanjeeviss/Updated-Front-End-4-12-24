@@ -13,6 +13,12 @@ import {
   Select,
   Divider,
   Paper,
+  IconButton,
+  Checkbox,
+  Menu,
+  ListItemText,
+  ListItemIcon,
+  FormHelperText,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { PAYMCOMPANIES, PAYMBRANCHES, REPORTS } from "../../../serverconfiguration/controllers";
@@ -21,10 +27,11 @@ import { ServerConfig } from "../../../serverconfiguration/serverconfig";
 import { useNavigate } from "react-router-dom";
 import { SAVE } from "../../../serverconfiguration/controllers";
 //   import Employeeprofile0909090 from "./EmployeePrfile1Org"
-import Sidenav from "../../Home Page/Sidenav";
-import Navbar from "../../Home Page/Navbar";
+import Sidenav from "../../Home Page-comapny/Sidenav1";
+import Navbar from "../../Home Page-comapny/Navbar1";
+import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 
-export default function PaymEmployeeFormm() {
+export default function PaymEmployeeFormmh1() {
   const navigate = useNavigate();
   const [company, setCompany] = useState([]);
   const [branch, setBranch] = useState([]);
@@ -40,9 +47,11 @@ export default function PaymEmployeeFormm() {
   const [gradeData, setGradeData] = useState([]);
 const [labelHeader, setLabelHeader] = useState("Grade"); 
 const [GradebyDivision, setGradebyDivision] = useState([]);
+const [selectedBranchIds, setSelectedBranchIds] = useState([]);
+const [anchorEl, setAnchorEl] = useState(null);
+const [touched, setTouched] = useState({});
+const [selectAll, setSelectAll] = useState(false);
 const [result, setResult] = useState({});
-
-
   const [formData, setFormData] = useState({
     pn_CompanyID: "",
     pn_BranchID: "",
@@ -110,58 +119,50 @@ const [result, setResult] = useState({});
   useEffect(() => {
     async function fetchInitialData() {
       try {
-        const loggedBranchData = await postRequest(ServerConfig.url, REPORTS, {
-          query:` select * from paym_Branch where Branch_User_Id = '${isloggedin}'`,
+        // Fetch the logged-in company data based on company_user_id
+        const loggedCompanyData = await postRequest(ServerConfig.url, REPORTS, {
+          query: `SELECT * FROM paym_Company WHERE company_user_id = '${isloggedin}'`,
         });
   
-        if (loggedBranchData.data) {
-          setloggedBranch(loggedBranchData.data);
+        if (loggedCompanyData.data) {
+          setloggedCompany(loggedCompanyData.data);
   
-          // Dynamically set pn_BranchID based on the fetched data
+          // Dynamically set pn_CompanyID based on the fetched company data
           setFormData((prevData) => ({
             ...prevData,
-            pn_BranchID: loggedBranchData.data[0].pn_BranchID,
+            pn_CompanyID: loggedCompanyData.data[0].pn_CompanyID,
           }));
+  
+          // Fetch branches for the company
+          fetchBranches(loggedCompanyData.data[0].pn_CompanyID);
         }
       } catch (error) {
-        console.error("Error fetching branch data:", error);
+        console.error("Error fetching company data:", error);
       }
     }
   
-    // Always fetch fresh data based on isloggedin
+    // Fetch the branches based on the company ID
+    async function fetchBranches(companyId) {
+      try {
+        const branchData = await postRequest(ServerConfig.url, REPORTS, {
+          query: `SELECT pn_BranchID, BranchName, BranchType FROM paym_branch WHERE pn_CompanyID = ${companyId}`,
+        });
+        
+  
+        if (branchData.data) {
+          setBranch(branchData.data); // Store the branches data
+        }
+      } catch (error) {
+        console.error("Error fetching branches data:", error);
+      }
+    }
+  
+    // Fetch initial data based on isloggedin
     if (isloggedin) {
       fetchInitialData();
     }
   }, [isloggedin]);
   
-  useEffect(() => {
-    async function fetchLoggedCompany() {
-      try {
-        if (loggedBranch.length > 0) {
-          const loggedCompanyData = await postRequest(ServerConfig.url, REPORTS, {
-            query:` select * from paym_Company where pn_CompanyID = ${loggedBranch[0].pn_CompanyID}`,
-          });
-  
-          if (loggedCompanyData.data) {
-            setloggedCompany(loggedCompanyData.data);
-  
-            // Dynamically set pn_CompanyID based on the fetched data
-            setFormData((prevData) => ({
-              ...prevData,
-              pn_CompanyID: loggedCompanyData.data[0].pn_CompanyID,
-            }));
-          }
-        }
-      } catch (error) {
-        console.error`("Error fetching company data:", error)`;
-      }
-    }
-  
-    // Fetch company data when loggedBranch is available
-    if (loggedBranch.length > 0) {
-      fetchLoggedCompany();
-    }
-  }, [loggedBranch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -197,7 +198,7 @@ const [result, setResult] = useState({});
     async function getData() {
       try {
         if (loggedBranch.length > 0) {
-          // Fetch Grade by Branch
+          // Fetch Grade by Branch 
           const GradebyBranch = await postRequest(ServerConfig.url, REPORTS, {
             query: `select * from GradeSlab_Branch where pn_branchid = ${loggedBranch[0].pn_BranchID}`,
           });
@@ -230,6 +231,7 @@ const [result, setResult] = useState({});
         console.error("Error fetching grade data:", error);
       }
     }
+  
     if (loggedBranch.length > 0) {
       getData();
     }
@@ -428,7 +430,7 @@ console.log("Is Result an Array?:", Array.isArray(result));
   
       if (save && save.status === 200) {
         alert("Data saved successfully");
-        navigate("/Employeeprofile0909");
+        navigate("/Employeeprofile0909h1");
       } else {
         alert("Failed to save data");
       }
@@ -466,10 +468,54 @@ const getUniqueGrades = (grades) => {
     setTabValue((prev) => prev - 1);
   };
 
+ 
+  const handleCancel = (resetForm) => {
+    resetForm(); // Reset the form on cancel
+  };
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
+  // Handle menu close
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
-  
+  // Handle branch selection change
+  const handleBranchChange = (branchId) => {
+    setSelectedBranchIds((prev) =>
+      prev.includes(branchId)
+        ? prev.filter((id) => id !== branchId)
+        : [...prev, branchId]
+    );
+    setErrors({ ...errors, pnBranchId: '' });
+  };
 
+  // Handle select all toggle
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedBranchIds([]); // Deselect all
+    } else {
+      setSelectedBranchIds(branch.map((b) => b.pn_BranchID)); // Select all
+    }
+    setSelectAll(!selectAll);
+    setErrors({ ...errors, pnBranchId: '' });
+  };
+
+  // Validate the form field
+  const validateField = (field) => {
+    const newErrors = { ...errors };
+    if (field === 'pnBranchId' && selectedBranchIds.length === 0) {
+      newErrors.pnBranchId = 'Please select at least one branch.';
+    }
+    setErrors(newErrors);
+  };
+
+  // Handle field blur (mark as touched and validate)
+  const handleBlur = (field) => {
+    setTouched({ ...touched, [field]: true });
+    validateField(field);
+  };
   return (
     <div className="background1">
 
@@ -538,24 +584,81 @@ const getUniqueGrades = (grades) => {
                           }}
                         />
                       </Grid>
-                       <Grid item xs={12} sm={4}>
-                      <TextField
-                  label={
-                    <span>
-                     Branch Name
-                      <span style={{ color: 'red'}}>*</span>
-                    </span>
-                   }
-                          InputLabelProps={{ shrink: true }}
-                          fullWidth
-                          name="BranchName"
-                          value={loggedBranch.length > 0 ? loggedBranch[0].BranchName : ""}
-                          variant="outlined"
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                        />
-                      </Grid>
+                   
+                         <Grid item xs={12} sm={6}>
+      <FormControl
+        fullWidth
+        error={touched.pnBranchId && Boolean(errors.pnBranchId)}
+      >
+        <div>
+          <TextField
+           value={
+            branch
+              ?.filter((b) => selectedBranchIds.includes(b.pn_BranchID))
+              .map((b) => b.BranchName)
+              .join(', ') || 'Branch List'
+          }
+            variant="outlined"
+            fullWidth
+            onClick={handleMenuClick}
+            onBlur={() => handleBlur('pnBranchId')}
+            InputProps={{
+              readOnly: true,
+              endAdornment: (
+                <IconButton size="small" onClick={handleMenuClick}>
+                  <ArrowDropDownIcon />
+                </IconButton>
+              ),
+            }}
+          />
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            sx={{ width: 400 }} // Adjust the width here
+          >
+            <MenuItem
+              onClick={handleSelectAll}
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                fontWeight: 'bold',
+              }}
+            >
+              Select All
+              <Checkbox checked={selectAll} />
+            </MenuItem>
+            {branch.map((b) => (
+  <MenuItem
+    key={b.pn_BranchID}
+    onClick={() => handleBranchChange(b.pn_BranchID)}
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '280px',
+    }}
+    disabled={b.BranchType !== 'Main Branch'} // Disable non-main branches
+  >
+    <ListItemText primary={b.BranchName} />
+    <ListItemIcon>
+      <Checkbox
+        checked={selectedBranchIds.includes(b.pn_BranchID)}
+        disabled={b.BranchType !== 'Main Branch'} // Disable checkbox for non-main branches
+      />
+    </ListItemIcon>
+  </MenuItem>
+))}
+
+          </Menu>
+        </div>
+        {touched.pnBranchId && errors.pnBranchId && (
+          <FormHelperText sx={{ color: 'error.main' }}>
+            {errors.pnBranchId}
+          </FormHelperText>
+        )}
+      </FormControl>
+    </Grid>
                       </Grid>
                       </Paper>
                 </div>

@@ -139,7 +139,6 @@ const LeaveapplyHr2 = () => {
 
   return (
     <Grid container>
-    {/* Navbar and Sidebar */}
     <Grid item xs={12}>
       <div style={{ backgroundColor: "#fff" }}>
         <Navbar />

@@ -248,7 +248,6 @@ import DesignationHome from "./components/Masters/Designation/Designationmaster"
 import SlideAnimationComponent from "./components/timecard";
 import HomePage1 from "./component/Home Page-comapny/HomePage1";
 import CompanyMasterss1 from "./component/Masters-company/CompanyMasters1";
-import BranchMaster1 from "./component/Masters-company/BranchMaster1";
 import CategoryFormMaster1 from "./component/Masters-company/CategoryMater1";
 import DivisionMaster1 from "./component/Masters-company/Division1";
 import DepartmentFormMaster1 from "./component/Masters-company/DepartmentMasters1";
@@ -282,6 +281,18 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Grade_Slab from "./component/Masters-company/SlabGrade";
 import EarnDeductCompanyMasters from "./component/Masters-company/EarnDeductMaster";
+import YesNoButtons from "./components/Tmpemployeidform";
+import BranchMaster1 from "./component/Masters-company/BranchHead";
+import BranchMasters2 from "./component/Masters-company/BranchMaster2";
+import EditEmployeeh1 from "./component/Masters-company/EmployeeCree/EditProfile1";
+import Editprofileh1 from "./component/Masters-company/EmployeeCree/Viewprofile";
+import EmployeeHomeH1 from "./component/Masters-company/EmployeeCree/EmployeeMater";
+import PaymEmployeeFormmh1 from "./component/Masters-company/EmployeeCree/Employeeprofile";
+import Employeeprofile0909h1 from "./component/Masters-company/EmployeeCree/EmployeePrfile1Org";
+import YesNoSwitch from "./components/Tmpemployeidform";
+import LoanMaster from "./component/Masters-company/LoanModule/LoanMaster";
+import LoanEntry from "./component/Masters-company/LoanModule/LoanEntry";
+import CTCSlabTable from "./component/Masters-company/LoanModule/LoanSlab";
 
 const store = createStore(entityReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -360,6 +371,7 @@ root.render(
              <Route path="/HomePage1" element={<HomePage1/>}/>
              <Route path="/CompanyMasterss1" element={<CompanyMasterss1/>}/>
              <Route path="/BranchMaster1" element={<BranchMaster1/>}/>
+             <Route path="/BranchMasters2" element={<BranchMasters2/>}/>
              <Route path="/CategoryFormMaster1" element={<CategoryFormMaster1/>}/>
              <Route path="/DivisionMaster1" element={<DivisionMaster1/>}/>
              <Route path="/DepartmentFormMaster1" element={<DepartmentFormMaster1/>}/>
@@ -369,13 +381,17 @@ root.render(
              <Route path="/JobStatusFormMaster1" element={<JobStatusFormMaster1/>}/>
              <Route path="/LevelFormMaster1" element={<LevelFormMaster1/>}/>
              <Route path="/PaymLeaveMaster1" element={<PaymLeaveMaster1/>}/>
-
              <Route path="/GradeSlab" element={<Grade_Slab/>}/>
              <Route path="/EarnDeductCompanyMasters" element={<EarnDeductCompanyMasters/>}/>
+             <Route path="/Editprofileh1/:employeeId" element={<Editprofileh1/>} />   
+             <Route path="/EditEmployeeh1/:employeeId"  element={<EditEmployeeh1/>}/>
+             <Route path="/EmployeeHomeH1" element={<EmployeeHomeH1/>}></Route>
+             <Route path="/PaymEmployeeFormmh1" element={<PaymEmployeeFormmh1/>}/>
+             <Route path="/Employeeprofile0909h1" element={<Employeeprofile0909h1/>}/>
 
 
           {/*login employee---------------------------------------------------------------------------------------------------*/}
-
+<Route path="/LoginForm" element={<LoginForm/>}/>
 
 <Route path="/HomePage2"  element={<HomePage2/>}/>
 <Route path="HolidaysempPage2" element={<HolidaysempPage2/>}/>
@@ -398,11 +414,18 @@ root.render(
 <Route path="/PaySlipTemplate" element={<PaySlipTemplate/>}/>
 <Route path="/PaySlipFormTemplate" element={<PaySlipFormTemplate/>}/>
 <Route path="/PrintPayslip" element={<PrintPayslip/>}/>
+<Route path="/YesNoSwitch" element={<YesNoSwitch/>}/>
+<Route path="/LoanMaster" element={<LoanMaster/>}/>
+<Route path="/LoanEntry" element={<LoanEntry/>}/>
+<Route path="/CTCSlabTable" element={<CTCSlabTable/>}/>
 
 
 
 
 
+
+
+{/* <Route path="/YesNoButtons" element={<YesNoButtons/>}/> */}
 
 
 
@@ -793,7 +816,7 @@ root.render(
       </Routes>
     </BrowserRouter>
   </Provider>
-  </ThemeProvider>
+    </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

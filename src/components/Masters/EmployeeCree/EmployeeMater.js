@@ -31,6 +31,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Card,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
@@ -42,32 +43,31 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { useNavigate } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#ffffff",
-    color: "#000000",
-  },
-  drawer: {
-    width: 300,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: 300,
-  },
+  // root: {
+  //   display: "flex",
+  // },
+  // appBar: {
+  //   zIndex: theme.zIndex.drawer + 1,
+  //   backgroundColor: "#ffffff",
+  //   color: "#000000",
+  // },
+  // drawer: {
+  //   width: 200,
+  //   flexShrink: 0,
+  // },
+  // drawerPaper: {
+  //   width: 200,
+  // },
   content: {
     flexGrow: 1,
     padding: theme.spacing(1),
     marginLeft: theme.spacing(0),
   },
-  toolbar: theme.mixins.toolbar,
   searchContainer: {
     display: "flex",
     alignItems: "center",
     backgroundColor: "#f1f1f1",
-    padding: theme.spacing(1),
+    padding: theme.spacing(0),
     borderRadius: theme.shape.borderRadius,
     marginBottom: theme.spacing(1),
     maxWidth: 250,
@@ -122,10 +122,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-around",
   },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
+  // formControl: {
+  //   margin: theme.spacing(1),
+  //   minWidth: 50,
+  // },
 }));
 
 function EmployeeHome() {
@@ -272,17 +272,23 @@ function EmployeeHome() {
   }, [loggedBranch]);
 
   return (
-    <Grid item xs={12}>
+    <Grid  item xs={12}>
       <div style={{ backgroundColor: "#fff" }}>
         <Navbar />
-        <Box height={30} />
+        <Box height={40} />
         <Box sx={{ display: "flex" }}>
           <Sidenav />
-          <Grid item xs={12} sm={10} md={9} lg={8} xl={7} style={{ marginLeft: "auto", marginRight: "auto", margin: "0 50px 50px 50px" }}>
+          <Grid item  xs={12}  style={{margin:'0 auto'}}>
+        
+
+          <div  className="background1" >
+          <Grid  container >
+<Card  style={{ maxWidth: 1100, width: "100%" ,margin:'20px' ,padding:'20px'}}>  
+
             <div className={classes.root}>
               <CssBaseline />
               <main className={classes.content}>
-                <div className={classes.toolbar} />
+                {/* <div className={classes.toolbar} /> */}
                 <div className={classes.header}>
                 <Typography variant="h4"style={{fontWeight:"500"}}>
                       Employees
@@ -413,7 +419,13 @@ function EmployeeHome() {
                 </TableContainer>
               </main>
             </div>
-          </Grid>
+          
+           
+            </Card>
+       </Grid>
+            </div>
+            </Grid>
+         
         </Box>
       </div>
     </Grid>

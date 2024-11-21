@@ -168,7 +168,6 @@ const handleSubmit = async (e) => {
             Add New Department 
             </Typography>
             <form onSubmit={handleSubmit}>
-
             <Grid  xs={12}  sm={12} item style={{padding:"20px 20px 0 20px " }}>
               <Typography style={{textAlign:"left",paddingBottom:"10px"}} gutterBottom>Department Name </Typography>
                   <FormControl fullWidth> 
