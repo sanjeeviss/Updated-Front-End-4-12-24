@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ag-grid-community/client-side-row-model": "^32.3.3",
+    "@ag-grid-community/core": "^32.3.3",
     "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -29,6 +31,8 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "ag-grid-community": "^32.3.3",
+    "ag-grid-react": "^32.3.3",
     "aos": "^2.3.4",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",

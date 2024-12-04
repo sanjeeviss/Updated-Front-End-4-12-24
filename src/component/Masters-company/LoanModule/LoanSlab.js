@@ -14,8 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { alignProperty } from "@mui/material/styles/cssUtils";
 import { Padding } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
-
-
 const CTCSlabTable = () => {
   const [rows, setRows] = useState([]);
   const [companyID, setCompanyID] = useState("");

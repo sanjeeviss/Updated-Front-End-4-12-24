@@ -1,0 +1,23 @@
+.ag-header-cell-label {
+    justify-content: center;
+  }
+
+  .hidden-row {
+    display: none; /* or visibility: hidden; */
+}
+
+.wrap-header .ag-header-cell-label {
+  white-space: pre-wrap; /* Allows wrapping on newline characters (\n) */
+  text-align: center; /* Optional: centers the text */
+  line-height: 1.2; /* Adjust line spacing if needed */
+}
+
+.static-column-header {
+  background-color: #4caf50 !important; /* Green for static columns */
+  color: white !important;
+}
+
+.dynamic-column-header {
+  background-color: #2196f3 !important; /* Blue for dynamic columns */
+  color: white !important;
+}

@@ -293,6 +293,17 @@ import YesNoSwitch from "./components/Tmpemployeidform";
 import LoanMaster from "./component/Masters-company/LoanModule/LoanMaster";
 import LoanEntry from "./component/Masters-company/LoanModule/LoanEntry";
 import CTCSlabTable from "./component/Masters-company/LoanModule/LoanSlab";
+import Masterroll from "./components/ReportFormates/masteerrol";
+import LoanApproval from "./component/Masters-company/LoanModule/Loanapprove";
+import PFvalues from "./component/Masters-company/PayslipModule/PFmodule/PFModule";
+import AllowanceMaster from "./component/Masters-company/PayslipModule/AllowanceModule/AllowanceMaster";
+import AllowanceValues from "./component/Masters-company/PayslipModule/AllowanceModule/AllowanceValues";
+import DeductionMaster from "./component/Masters-company/PayslipModule/DeductionModule.js/DeductionMaster";
+import AllowanceSettings from "./component/Masters-company/PayslipModule/AllowanceModule/AllowanceSettings";
+import AllowanceMasterBranch from "./components/Masters/PayslipModule/AllowanceModule/AllowanceMaster";
+import AllowanceValuesBranch from "./components/Masters/PayslipModule/AllowanceModule/AllowanceValues";
+import AllowanceSettingsBranch from "./components/Masters/PayslipModule/AllowanceModule/AllowanceSettings";
+import ESIsettings from "./component/Masters-company/PayslipModule/DeductionModule.js/EsiSettings";
 
 const store = createStore(entityReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -388,6 +399,8 @@ root.render(
              <Route path="/EmployeeHomeH1" element={<EmployeeHomeH1/>}></Route>
              <Route path="/PaymEmployeeFormmh1" element={<PaymEmployeeFormmh1/>}/>
              <Route path="/Employeeprofile0909h1" element={<Employeeprofile0909h1/>}/>
+          
+
 
 
           {/*login employee---------------------------------------------------------------------------------------------------*/}
@@ -418,6 +431,24 @@ root.render(
 <Route path="/LoanMaster" element={<LoanMaster/>}/>
 <Route path="/LoanEntry" element={<LoanEntry/>}/>
 <Route path="/CTCSlabTable" element={<CTCSlabTable/>}/>
+<Route path="/LoanApproval" element={<LoanApproval/>}/>
+<Route path="/PFvalues" element={<PFvalues/>}/>
+<Route path="/AllowanceMaster" element={<AllowanceMaster/>}/>
+<Route path="/AllowanceValues" element={<AllowanceValues/>}/>
+<Route path="/DeductionMaster" element={<DeductionMaster/>}/>
+<Route path="/AllowanceSettings" element={<AllowanceSettings/>}/>
+<Route path="/AllowanceMasterBranch" element={<AllowanceMasterBranch/>}/>
+<Route path="/AllowanceValuesBranch" element={<AllowanceValuesBranch/>}/>
+<Route path="/AllowanceSettingsBranch" element={<AllowanceSettingsBranch/>}/>
+<Route path="/ESIsettings" element={<ESIsettings/>}/>
+
+
+
+
+
+
+
+
 
 
 

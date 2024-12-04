@@ -305,6 +305,214 @@ export default function Sidenav() {
   </NavLink>
 </ListItem>
 
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/CTCSlabTable"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> Loan Slab</span>
+  </NavLink>
+</ListItem>
+
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/LoanMaster"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> Loan Master</span>
+  </NavLink>
+</ListItem>
+
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/AllowanceMaster"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> Allowance Master</span>
+  </NavLink>
+</ListItem>
+
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/AllowanceValues"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> Allowance Values</span>
+  </NavLink>
+</ListItem>
+
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/DeductionMaster"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> Deduction Master</span>
+  </NavLink>
+</ListItem>
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/PFvalues"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> PF Settings</span>
+  </NavLink>
+</ListItem>
+
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/ESIsettings"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> ESI Settings</span>
+  </NavLink>
+</ListItem>
+
+<ListItem disablePadding sx={{ display: "block" }}>
+  <NavLink
+    to="/AllowanceSettings"
+    className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "active" : ""
+    }
+    style={({ isActive }) => ({
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      backgroundColor: isActive ? "#d0f0c0" : "transparent",
+      // borderLeft: isActive ? "4px solid #90ee90" : "none",
+      padding: "8px 20px",
+    })}
+  >
+    <StarHalfIcon 
+
+      style={{
+        color: "black",
+        marginRight: "20px",
+      }}
+    />
+    <span style={{ color: "black" }}> Allowance Settings</span>
+  </NavLink>
+</ListItem>
+
+
           {/* <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/GradeSlab")}>
             <ListItemButton
               sx={{

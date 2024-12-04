@@ -291,7 +291,6 @@ const DivisionOptions = Division.filter((e) => e.BranchID == pn_BranchID && !sav
   value: e.pn_DivisionID,
   label: e.v_DivisionName,
 }));
-
   const handleBranchChange = (selectedOptions) => {
     if (selectedOptions.some((option) => option.value === 'all')) {
       setSelectedBranches(['all', ...allBranchIDs]);
